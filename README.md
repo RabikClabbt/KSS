@@ -30,7 +30,7 @@
 
 データベース：<img src="https://img.shields.io/badge/-Mysql-000000.svg?logo=mysql&style=plastic">
 
-使用言語：<img src="https://img.shields.io/badge/-Html5-000000.svg?logo=html5&style=plastic">
+使用言語：<img src="https://img.shields.io/badge/-Html-000000.svg?logo=html5&style=plastic">
 <img src="https://img.shields.io/badge/-Javascript-000000.svg?logo=javascript&style=plastic">
 <img src="https://img.shields.io/badge/-Vue.js-000000.svg?logo=vue.js&style=plastic">
 <img src="https://img.shields.io/badge/-PHP-000000.svg?logo=php&style=plastic">
