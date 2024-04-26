@@ -1,16 +1,10 @@
 # チーム名：クBot システム ソリューションズ（KSS）
-チームメンバー：
-
-久保 雄太（L）
-
-小林 夏己（SL）
-
-井上 架（Mem）
-
-川田 大地（Mem）
-
-高野 颯馬（Mem）
-
+チームメンバー：<br>
+久保 雄太（L）<br>
+小林 夏己（SL）<br>
+井上 架（Mem）<br>
+川田 大地（Mem）<br>
+高野 颯馬（Mem）<br>
 平井 賢太（Mem）
 
 # 企画名：Yadi-X(ヤディクス)
@@ -39,33 +33,29 @@
 <img src="https://img.shields.io/badge/-React-000000.svg?logo=React&style=plastic">
 
 # GitHubの利用について
-当リポジトリをクローン後、各自でブランチを作成してください。
-
-ブランチ名は、名前_機能名など、明示的な名前にしてください。
-
-ブランチの作成法については、「[ブランチを活用する方法](https://x.gd/DTn0g)」参照してください。
-
-作成後は、ブランチからmasterへpull requestしてください。
-
-エラーや問題が発生した際は、DiscordやGitHub Issuesなどで、知らせるか、直接聞いてください。
+当リポジトリをクローン後、各自でブランチを作成してください。<br>
+ブランチ名は、名前_機能名など、明示的な名前にしてください。<br>
+ブランチの作成法については、「[ブランチを活用する方法](https://x.gd/DTn0g)」参照してください。<br>
+作成後は、ブランチからmasterへpull requestしてください。<br>
+エラーや問題が発生した際は、DiscordやGitHub Issuesなどで、知らせるか、直接聞いてください。<br>
 
 # Visual Stadio Codeの便利な拡張機能
 おすすめの拡張機能の紹介
 
-ChatGPT GPT-4 - Bito AI Code Assistant  VScode内でChatGPTを扱うことが出来る
+ChatGPT GPT-4 - Bito AI Code Assistant<br> VScode内でChatGPTを扱うことが出来る
 
-Microsoft Edge Tools for VS Code  一々、ブラウザを開くことなく動作を確認できる
+Microsoft Edge Tools for VS Code <br> 一々、ブラウザを開くことなく動作を確認できる
 
-Tabnine: AI Autocomplete & Chat  Codeの続きを予測して表示してくれる。（Tabキーで確定できる）
+Tabnine: AI Autocomplete & Chat <br> Codeの続きを予測して表示してくれる。（Tabキーで確定できる）
 
-GitHub Pull Requests  VScode内でpull requestやIssuesを行うことが出来る。
+GitHub Pull Requests <br> VScode内でpull requestやIssuesを行うことが出来る。
 
-GitLens — Git supercharged　　よく分かんない…
+GitLens — Git supercharged <br> よく分かんない…
 
 # 命名規則について
 ファイルや変数名などの命名規則についての説明です。
 
-ファイルについては、大文字始まりで単語の区切りも大文字でお願いします。  例: ExsampleTextFile.txt
+ファイルについては、大文字始まりで単語の区切りも大文字でお願いします。 <br> 例: ExsampleTextFile.txt
 
 変数名は基本的に何を扱う変数なのかが分かるような命名にしてください。有効数字2桁を変数名の後ろに付ける、複数単語の変数名にする、単語の頭文字のみにするなど都度対応してください。
 複数画面で扱うような変数の場合は、次項の変数名一覧に記載してください。
