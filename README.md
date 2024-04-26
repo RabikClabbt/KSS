@@ -49,10 +49,23 @@
 
 エラーや問題が発生した際は、DiscordやGitHub Issuesなどで、知らせるか、直接聞いてください。
 
+# Visual Stadio Codeの便利な拡張機能
+おすすめの拡張機能の紹介
+
+ChatGPT GPT-4 - Bito AI Code Assistant  VScode内でChatGPTを扱うことが出来る
+
+Microsoft Edge Tools for VS Code  一々、ブラウザを開くことなく動作を確認できる
+
+Tabnine: AI Autocomplete & Chat  Codeの続きを予測して表示してくれる。（Tabキーで確定できる）
+
+GitHub Pull Requests  VScode内でpull requestやIssuesを行うことが出来る。
+
+GitLens — Git supercharged　　よく分かんない…
+
 # 命名規則について
 ファイルや変数名などの命名規則についての説明です。
 
-ファイルについては、大文字始まりで単語の区切りも大文字でお願いします。例: ExsampleTextFile.txt
+ファイルについては、大文字始まりで単語の区切りも大文字でお願いします。  例: ExsampleTextFile.txt
 
 変数名は基本的に何を扱う変数なのかが分かるような命名にしてください。有効数字2桁を変数名の後ろに付ける、複数単語の変数名にする、単語の頭文字のみにするなど都度対応してください。
 複数画面で扱うような変数の場合は、次項の変数名一覧に記載してください。
