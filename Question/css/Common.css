@@ -1,7 +1,0 @@
-@charset "utf-8";
-/* 全画面共通のCSS */
-
-/* 背景色変えておきます */
-body.main{
-    background-color : #313131;
-}
