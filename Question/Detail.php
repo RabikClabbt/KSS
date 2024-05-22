@@ -1,3 +1,7 @@
+<?php 
+    session_start();
+    require '../src/db-connect.php';
+?>
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -9,7 +13,8 @@
   <body>
       <header>
             <!-- Header.htmlを読み込む -->
-            <include src="../Header/Header.html"></include>
+            <div id="external-content"></div>
+            <?php require '../Header/Header.html' ?>
             <div class="categorylist">
                 <p>生活</p>
                 <p>学校</p>
