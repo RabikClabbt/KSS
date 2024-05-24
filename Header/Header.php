@@ -13,7 +13,7 @@
             <div class="icon">
                 <a href="">
                     <div class="circle">
-                        <!-- ここの画像はデータベース化取得する-->
+                        <!-- ここの画像はデータベースから取得する-->
                         <?php
                             if(isset($_SESSION['users'])) {
                                 echo '<img src="'. $_SESSION['users']['profileIcon'] .'" alt="profileIcon">';
