@@ -4,7 +4,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <link rel ="stylesheet" href = "css/Search.css">
+    <link rel ="stylesheet" href = "css/search.css">
     <title>検索</title>
 </head>
 <body>
@@ -40,7 +40,7 @@
             echo '<br>';
             echo $row['userID'];
             echo '<br>';
-            echo $row['mailaddress'];
+            echo $row['nickname'];
             echo '<br>';
         }
     }
@@ -52,7 +52,7 @@
             echo '<br>';
             echo $row['userID'];
             echo '<br>';
-            echo $row['mailaddress'];
+            echo $row['nickname'];
             echo '<br>';
         }
     }
@@ -79,6 +79,10 @@
             echo '<br>';
             echo $row['userID'];
             echo '<br>';
+            echo $row['questionTitle'];
+            echo '<br>';
+            echo $row['questionText'];
+            echo '<br>';
         }
     }
     //入力されていて、一致するものがあった場合
@@ -88,6 +92,10 @@
             echo '<img src="image/icon.png" width="30" height="30">';
             echo '<br>';
             echo $row['userID'];
+            echo '<br>';
+            echo $row['questionTitle'];
+            echo '<br>';
+            echo $row['questionText'];
             echo '<br>';
         }
     }
