@@ -1,4 +1,5 @@
 <?php
+session_start();
 require 'db-connect.php';
 $pdo = new PDO($connect, user, pass);
 $icons = [
@@ -14,7 +15,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 die('Failed to create directory.');
             }
         }
-        $file = './File/' . basename($_FILES['file']['name']);
+        $file = 'File/' . basename($_FILES['file']['name']);
         if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
             //ファイルが正常にアップロードされました
         } else {
@@ -47,32 +48,47 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     </div>
     <div class="content">
         <div class="sideber">
-            <?php foreach ($icons as $icon): ?>
-                <div class="menu-icon" onclick="goToPage('<?php echo $icon['url']; ?>')" title="<?php echo $icon['label']; ?>">
-                    <img src="<?php echo $icon['img']; ?>" alt="<?php echo $icon['label']; ?>" class="icon-img">
-                </div>
-            <?php endforeach; ?>
+            <div class="menu-icon" onclick="goToPage('page1.php')" title="Q&A">
+                <img src="image/Q&A.svg" alt="Q&A" class="icon-img">
+            </div>
+            <div class="menu-icon" onclick="goToPage('page2.php')" title="chat">
+                <img src="image/chat.svg" alt="chat" class="icon-img">
+            </div>
+            <div class="menu-icon" onclick="goToPage('page3.php')" title="group-chat">
+                <img src="image/group-chat.svg" alt="group-chat" class="icon-img">
+            </div>
         </div>
         <div class="main-content">
             <?php
-            $user = $pdo->prepare('select * from Users');
-            $sql = $pdo->prepare('select * from GlobalChat');
-            $sql->execute();
             ?>
             <div class="global-chat">
                 <?php
-                foreach($sql as $row){
-                echo '<div class=chat-comment>';
-                echo '<div class="icon">
-                        <a href="">
-                            <div class="circle">
-                                <img src="" alt="ProfileImage">
-                            </div>
-                        </a>
-                    </div>';
-                echo '<p class="account-name">ヤシの木</p>';
-                echo '<p class="comment">',$row['commentText'],'</p>';
-                echo '</div>';
+                $user = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID');
+                $user->execute();
+                $questions = $user->fetchAll(PDO::FETCH_ASSOC);
+                $rply = $pdo->prepare('SELECT COUNT(*) as rplyCount FROM GlobalChat WHERE replyID = ?');
+                foreach($questions as $row){
+                    if($row['replyID'] == null){
+                        $rply->execute([$row['commentID']]);
+                        $rplya = $rply->fetch(PDO::FETCH_ASSOC);
+                        $rplyCount = $rplya['rplyCount'];
+                        echo '<div class=chat-comment>';
+                        echo '<div class="account">
+                                <a href="">
+                                    <div class="account-image">
+                                        <img src="',$row['profileIcon'],'" alt="ProfileImage">
+                                    </div>
+                                </a>
+                                <p class="account-name">',$row['nickname'],'</p>
+                            </div>';
+                        echo '<p class="comment">',$row['commentText'],'</p>';
+                        echo '<div class="rply">
+                                <img src="image/rplyicon.svg" alt="rply" height="20" width="20">
+                                <span>' . $rplyCount . '</span>
+                                <img src="image/goodicon.svg" alt="good" height="20" width="20">
+                            </div>';
+                        echo '</div>';
+                    }
                 }
                 ?>
             </div>
