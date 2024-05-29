@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require 'db-connect.php';
+require '../db-connect.php';
 
 unset($_SESSION['users']);
 $pdo = new PDO($connect , user , pass);
@@ -20,7 +20,7 @@ if ($row && password_verify($_POST['pass'], $row['password'])) {
     //header('Location: ???.php');
     exit;
 } else {
-    header('Location: login-again.php');
+    header('Location: LoginAgain.php');
 }
 ?>
 
