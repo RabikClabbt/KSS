@@ -27,7 +27,7 @@
             </div>
             <h3 class="minwhite">確認</h3>
             <div class="center">
-                <input class="text-size" type="text" name="new pass" id="">
+                <input class="text-size" type="text" name="kaku pass" id="">
             </div>
             <div class="button">
                 <input type="submit" value="保存">
