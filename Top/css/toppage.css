@@ -1,0 +1,116 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #313131;
+}
+
+p {
+    color: #fff;
+}
+
+.content {
+    display: flex;
+    flex-grow: 1;
+    position: relative; /* relative positioning for main content */
+}
+
+.main-content {
+    flex-grow: 1;
+    position: relative; /* 相対配置 */
+    display: flex;
+    flex-direction: column; /* 縦方向の配置 */
+    align-items: flex-end; /* 下端に配置 */
+    width: calc(100% - 70px - 20%); /* サイドバーの幅を差し引いた幅 */
+    padding: 10px; /* 下部のパディング */
+}
+
+.global-chat{
+    width: 100%;
+}
+.chat-comment{
+    width: 80%;
+    min-height: 100px;
+    margin: 0 auto;
+    background-color: #494949;
+    margin-bottom: 3px;
+}
+.account{
+    display: flex;
+    align-items: center;
+}
+.account-image{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* 円形の形状を作成 */
+    overflow: hidden; /* 画像が円内に収まるようにする */
+    border: 2px solid #06c286;
+}
+
+.sideber {
+    background-color: #575757;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70px;
+    padding-left: 3px;
+}
+
+.sideber2 {
+    background-color: #575757;
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    padding-left: 3px;
+}
+
+.menu-icon {
+    width: 50px;
+    height: 50px;
+    border: 3px solid #06c286;
+    border-radius: 15px; /* 丸みを帯びた縁を設定 */
+    padding: 5px;
+    margin: 5px;
+}
+
+.send {
+    border: 3px solid #06c286;
+    border-radius: 15px; /* 丸みを帯びた縁を設定 */
+    position: absolute; /* 絶対配置 */
+    left: 2px;
+    bottom: 0; /* 下端に配置 */
+    width: 100%;
+    justify-content: space-between; /* 左右に均等にスペースを配置 */
+    align-items: center; /* 上下中央に配置 */
+}
+
+.text-box {
+    display: flex;
+    align-items: center;
+    width:100%; /* ボタンを除いた幅 */
+    background-color: transparent; /* 背景色を透明に */
+    padding: 5px; /* 内側に余白を追加 */
+}
+
+.chat-text {
+    flex-grow: 1;
+    height: 40px; /* 高さを固定 */
+    outline: none;
+    border: none; /* ボーダーを削除 */
+    background-color: transparent; /* 背景色を透明に */
+    color: #FFFFFF; /* テキストの色を白に */
+    padding-left: 10px; /* テキストのインデント */
+}
+
+.send-button, .send-file {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px; /* ボタンに余白を追加 */
+}
+
+.send-button img, .send-file img {
+    width: 20px;
+    height: 20px;
+}
