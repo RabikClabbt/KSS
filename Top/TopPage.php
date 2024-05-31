@@ -110,6 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </button>
                     <label for="file-upload" class="send-file">
                         <img src="Image/file-icon.svg" width="20" height="20" alt="ファイル添付">
+
                     </label>
                     <input type="file" id="file-upload" name="file" style="display: none;" onchange="displayFileName(this)">
                 </form>
