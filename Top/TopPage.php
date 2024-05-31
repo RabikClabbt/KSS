@@ -1,14 +1,15 @@
 <?php
 session_start();
-require 'db-connect.php';
+require '../db-connect.php';
 $pdo = new PDO($connect, user, pass);
 $icons = [
-    ['url' => 'page1.php', 'label' =>'Q&A','img'=> 'image/Q&A.svg'],
-    ['url' => 'page2.php', 'label' =>'chat','img'=> 'image/chat.svg'],
-    ['url' => 'page3.php', 'label' =>'group-chat','img'=> 'image/group-chat.svg']
+    ['url' => 'page1.php', 'label' => 'Q&A', 'img' => 'Image/Q&A.svg'],
+    ['url' => 'page2.php', 'label' => 'chat', 'img' => 'Image/chat.svg'],
+    ['url' => 'page3.php', 'label' => 'group-chat', 'img' => 'Image/group-chat.svg']
 ];
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $sql = $pdo->prepare('INSERT INTO GlobalChat (userID, commentText,appendFile ) VALUES (?, ?,?)');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $sql = $pdo->prepare('INSERT INTO GlobalChat (userID, commentText, appendFile) VALUES (?, ?, ?)');
     if (is_uploaded_file($_FILES['file']['tmp_name'])) {
         if (!file_exists('File')) {
             if (!mkdir('File')) {
@@ -22,6 +23,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             die('Failed to move uploaded file.');
         }
     }
+    $sql->execute([$_POST['userID'], $_POST['HeaderSearch'], $file ?? null]);
 }
 ?>
 <!DOCTYPE html>
@@ -44,48 +46,47 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 </head>
 <body>
     <div class="headerr">
-        <?php require 'Header.html'; ?>
+        <?php require '../Header/Header.php'; ?>
     </div>
     <div class="content">
         <div class="sideber">
             <div class="menu-icon" onclick="goToPage('page1.php')" title="Q&A">
-                <img src="image/Q&A.svg" alt="Q&A" class="icon-img">
+                <img src="Image/Q&A.svg" alt="Q&A" class="icon-img">
             </div>
             <div class="menu-icon" onclick="goToPage('page2.php')" title="chat">
-                <img src="image/chat.svg" alt="chat" class="icon-img">
+                <img src="Image/chat.svg" alt="chat" class="icon-img">
             </div>
             <div class="menu-icon" onclick="goToPage('page3.php')" title="group-chat">
-                <img src="image/group-chat.svg" alt="group-chat" class="icon-img">
+                <img src="Image/group-chat.svg" alt="group-chat" class="icon-img">
             </div>
         </div>
         <div class="main-content">
-            <?php
-            ?>
             <div class="global-chat">
                 <?php
                 $user = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID');
                 $user->execute();
                 $questions = $user->fetchAll(PDO::FETCH_ASSOC);
                 $rply = $pdo->prepare('SELECT COUNT(*) as rplyCount FROM GlobalChat WHERE replyID = ?');
-                foreach($questions as $row){
-                    if($row['replyID'] == null){
+                foreach ($questions as $row) {
+                    if ($row['replyID'] == null) {
                         $rply->execute([$row['commentID']]);
                         $rplya = $rply->fetch(PDO::FETCH_ASSOC);
                         $rplyCount = $rplya['rplyCount'];
-                        echo '<div class=chat-comment>';
+                        echo '<div class="chat-comment">';
                         echo '<div class="account">
-                                <a href="">
                                     <div class="account-image">
-                                        <img src="',$row['profileIcon'],'" alt="ProfileImage">
+                                    <a href="../page1" class="profile"><img src="', $row['profileIcon'], '" alt="ProfileImage"></a>
                                     </div>
-                                </a>
-                                <p class="account-name">',$row['nickname'],'</p>
+                                    <a href="" class="profile2"><p class="account-name">', $row['nickname'], '</p></a>
                             </div>';
-                        echo '<p class="comment">',$row['commentText'],'</p>';
+                        echo '<p class="comment">', $row['commentText'], '</p>';
+                        echo '<a href="Globalrply.php" class="linkrply"></a>';
                         echo '<div class="rply">
-                                <img src="image/rplyicon.svg" alt="rply" height="20" width="20">
-                                <span>' . $rplyCount . '</span>
-                                <img src="image/goodicon.svg" alt="good" height="20" width="20">
+                                <img src="Image/rplyicon.svg" alt="rply" height="20" width="20">
+                                <div class="balloon3-left">
+                                    <p>', $rplyCount, '</p>
+                                </div>
+                                <img src="Image/goodicon.svg" alt="good" height="20" width="20">
                             </div>';
                         echo '</div>';
                     }
@@ -93,14 +94,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 ?>
             </div>
             <!-- 入力フォーム -->
+            <?php
+            if (isset($_SESSION['users'])) {
+                $userID = $_SESSION['users']['userID'];
+            } else {
+                $userID = 0; // 例: ログインしていないユーザーのためのデフォルト値
+            }
+            ?>
             <div class="send">
                 <form action="TopPage.php" method="post" enctype="multipart/form-data" class="text-box">
+                    <input type="hidden" name="userID" value="<?php echo $userID; ?>">
                     <input type="text" autocomplete="off" class="chat-text" placeholder="テキストを入力" name="HeaderSearch" spellcheck="false">
                     <button type="submit" class="send-button">
-                        <img src="image/send-icon.svg" width="20" height="20" alt="送信">
+                        <img src="Image/send-icon.svg" width="20" height="20" alt="送信">
                     </button>
                     <label for="file-upload" class="send-file">
-                        <img src="image/file-icon.svg" width="20" height="20" alt="ファイル添付">
+                        <img src="Image/file-icon.svg" width="20" height="20" alt="ファイル添付">
                     </label>
                     <input type="file" id="file-upload" name="file" style="display: none;" onchange="displayFileName(this)">
                 </form>
