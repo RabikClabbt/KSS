@@ -17,22 +17,9 @@ if ($row && password_verify($_POST['pass'], $row['password'])) {
         'name' => $row['nickname'],
         'icon' => $row['profileIcon']
     ];
-    //header('Location: ???.php');
+    header('Location: ../GroupControl/GroupCreate.php');
     exit;
 } else {
     header('Location: LoginAgain.php');
 }
-?>
-
-<?php //require 'header.php'; ?>
-<!--
-<link rel="stylesheet" href="css/login.css">
--->
-<?php
-    /*require 'login_over.php';
-if (isset($_SESSION['login_error'])) {
-    echo '<p class="error">' . $_SESSION['login_error'] . '</p>';
-    unset($_SESSION['login_error']); 
-    require 'login_under.php';
-}*/
 ?>
