@@ -1,11 +1,11 @@
-<?php require 'db-connect.php'; ?>
-<?php require 'Header.php'; ?>
+<?php require '../db-connect.php'; ?>
+<?php require '../Header/Header.php'; ?>
 <!DOCTYPE html>
 <html lang="ja">
 	<head>
     <meta http-equiv="Cache-Control" content="no-cache">
 		<meta charset="UTF-8">
-        <link rel="stylesheet" href="css/a.css">
+        <link rel="stylesheet" href="../css/UserInfoEdit.css">
 		<title>プロフィール編集画面</title>
 	</head>
 	<body>
@@ -23,11 +23,11 @@
             </div>
             <h3 class="minwhite">新しいパスワード</h3>
             <div class="center">
-                <input class="text-size" type="text" name="new pass" id="">
+                <input class="text-size" type="text" name="new_pass" id="">
             </div>
             <h3 class="minwhite">確認</h3>
             <div class="center">
-                <input class="text-size" type="text" name="kaku pass" id="">
+                <input class="text-size" type="text" name="kaku_pass" id="">
             </div>
             <div class="button">
                 <input type="submit" value="保存">
