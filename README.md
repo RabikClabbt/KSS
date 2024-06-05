@@ -48,3 +48,16 @@
 
 変数名は基本的に何を扱う変数なのかが分かるような命名にしてください。<br>
 有効数字2桁を変数名の後ろに付ける、複数単語の変数名にする、単語の頭文字のみにするなど都度対応してください。
+
+# Visual Stadio Codeの便利な拡張機能
+おすすめの拡張機能の紹介
+
+ChatGPT GPT-4 - Bito AI Code Assistant<br> VScode内でChatGPTを扱うことが出来る
+
+Microsoft Edge Tools for VS Code <br> 一々、ブラウザを開くことなく動作を確認できる
+
+Tabnine: AI Autocomplete & Chat <br> Codeの続きを予測して表示してくれる。（Tabキーで確定できる）
+
+GitHub Pull Requests <br> VScode内でpull requestやIssuesを行うことが出来る。
+
+GitLens — Git supercharged <br> よく分かんない…
