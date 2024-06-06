@@ -44,3 +44,4 @@ $stmt->execute([$mail, $hashed_new_pass, $user_id]);
 
 echo 'ユーザー情報が更新されました。';
 ?>
+
