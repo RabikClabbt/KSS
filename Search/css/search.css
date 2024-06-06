@@ -6,6 +6,15 @@
     display:flex;
 }
 
+h2{
+    position:relative;
+    top:25px;
+}
+
+body{
+    background-color: #313131;
+}
+
 .text{
     background-color: #808080;
     border-color: #808080;

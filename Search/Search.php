@@ -23,7 +23,8 @@
     $ustr='select * from Users where ';
     $qstr='select * from Question where ';
     echo '<div class="result">';
-    echo 'ユーザー';
+    echo "<font color='#ffffff'>";
+    echo '<h2>','ユーザー','</h2>';
     //ユーザー名が入力されている
     if(isset($_POST['search'])){
         $ustr = $ustr.'userID like ?';
@@ -62,10 +63,10 @@
         echo '一致するものがありませんでした。';
     }
     echo '<br>';
-    echo '質問';
+    echo '<h2>','質問','</h2>';
     //質問名が入力されている
     if(isset($_POST['search'])){
-        $qstr = $qstr.'userID like ?';
+        $qstr = $qstr.'questionText like ?';
         $qkeyArray[0]='%'.$_POST['search'].'%';
         $sql=$pdo->prepare($qstr);
         $sql->execute($qkeyArray);
@@ -104,6 +105,7 @@
         echo '<br>';
         echo '一致するものがありませんでした。';
     }
+    echo "</font>";
     echo '</div>';
 ?>
 </body>

@@ -1,21 +1,7 @@
 <?php require 'db-connect.php' ?>
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <link rel ="stylesheet" href = "css/chat.css">
-    <title>個人チャット画面</title>
-</head>
-<body>
-<form action="PersonalChat.php" method="post">
-<input type="text" name="chat" style="width: 600px;height:20px;" class="text" required>
-<input type="submit" value="送信" class="button">
-</form>
 <?php
-
-    //コメントID記録用(commentID最大値取得)
-    $mcount = 0;
-    $pcount = 0;
+    ob_start();
+    //コメントID記録用
     $count = 0;
 
     //データベース接続用
@@ -66,10 +52,10 @@
 
     //登録するcommentIDの値を格納
     if($mcount>$pcount){
-        $count = $mcount+1;
+        $count = $mcount;
     }
     else{
-        $count = $pcount+1;
+        $count = $pcount;
     }
 
     //対象の相手にチャット内容を送信する
@@ -89,11 +75,32 @@
         $Array[4] = 'default';
         $insert->execute($Array);
         $count+=1;
+
+        header("Location: PersonalChat.php");
+        exit();
     }
     //相手が見つからない場合
     else if($msql->rowCount()==0){
         echo '送信する相手が見つかりませんでした。';
     }
 ?>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel ="stylesheet" href = "css/chat.css">
+    <title>個人チャット画面</title>
+</head>
+<body>
+<form action="PersonalChat.php" method="post">
+<input type="text" name="chat" id="clear" value="" style="width: 600px;height:20px;" class="text" required>
+<input type="submit" value="送信" class="button">
+</form>
 </body>
 </html>
+
+<?php
+// End output buffering and flush output
+ob_end_flush();
+?>
