@@ -29,7 +29,66 @@ input.text-size{
     width: 750;
     height: 50;
 }
-.center{
+.center{* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #313131;
+}
+.a {
+    width: 750px;
+    height: 500px;
+    margin: 0 auto;
+}
+.mainwhite {
+    color: #FFFFFF;
+    font-size: 36px;
+    text-align: center;
+}
+.white {
+    color: #FFFFFF;
+    font-size: 24px;
+    text-align: left;
+}
+.minwhite {
+    color: #FFFFFF;
+    font-size: 16px;
+}
+input.text-size {
+    width: 100%; /* 幅を100%に設定 */
+    height: 50px;
+    margin-bottom: 10px; /* フィールド間に余白を追加 */
+    padding: 10px; /* フィールド内に余白を追加 */
+    border: 1px solid #ccc; /* 枠線を追加 */
+    border-radius: 4px; /* 角を丸く */
+}
+.center {
+    text-align: center;
+}
+.button {
+    text-align: center;
+}
+
+/* プロフィール情報の変更ボタンと同じスタイル */
+.button input[type="submit"] {
+    background-color: #4CAF50; /* ボタンの背景色 */
+    color: white; /* ボタンの文字色 */
+    padding: 15px 20px; /* ボタンの内側の余白 */
+    border: none; /* ボタンの枠線を無し */
+    border-radius: 4px; /* ボタンの角を丸く */
+    text-align: center; /* テキストの配置を中央 */
+    text-decoration: none; /* テキストの装飾を無し */
+    display: inline-block; /* ボタンをインラインブロック要素に */
+    font-size: 16px; /* ボタンの文字サイズ */
+    cursor: pointer; /* ボタンにマウスカーソルを表示 */
+    margin: 10px 2px; /* ボタンの外側の余白 */
+}
+
+.button input[type="submit"]:hover {
+    background-color: #45a049; /* ホバー時のボタンの背景色 */
+}
+
     text-align: center;
 }
 .button{
