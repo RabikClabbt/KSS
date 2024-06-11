@@ -9,15 +9,18 @@ body {
 p {
     color: #fff;
 }
+a{
+    text-decoration: none;
+    color: inherit;
+    border: none;
+}
 
 .content {
     display: flex;
     flex-grow: 1;
     position: relative; /* relative positioning for main content */
 }
-
 /* ---メインコンテンツ--- */
-
 .main-content {
     flex-grow: 1;
     position: relative; /* 相対配置 */
@@ -53,6 +56,9 @@ p {
     display: flex;
     align-items: center;
 }
+.account a{
+    display: block;
+}
 .account-image{
     width: 40px;
     height: 40px;
@@ -60,6 +66,37 @@ p {
     overflow: hidden; /* 画像が円内に収まるようにする */
     border: 2px solid #06c286;
 }
+.rply{
+    display: flex;
+    justify-content: flex-end;
+}
+.balloon3-left {
+    position: relative;
+    display: inline-block;
+    margin: 0px 10px 1px 7px;
+    padding: 0 4px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #FFF;
+    font-size: 15px;
+    font-weight: bold;
+    background: #06c286;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+.balloon3-left:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -6.5px;
+    margin-top: -3px;
+    border: 3px solid transparent;
+    border-right: 5px solid #06c286;
+    z-index: 0;
+}
+/* ------------------ */
 
 .profile,.profile2{
     pointer-events: none;
