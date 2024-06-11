@@ -43,6 +43,15 @@ a{
     background-color: #494949;
     margin-bottom: 3px;
 }
+
+.linkrply{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height:100%;
+    width: 100%;
+}
+
 .account{
     display: flex;
     align-items: center;
@@ -61,6 +70,43 @@ a{
     display: flex;
     justify-content: flex-end;
 }
+.balloon3-left {
+    position: relative;
+    display: inline-block;
+    margin: 0px 10px 1px 7px;
+    padding: 0 4px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #FFF;
+    font-size: 15px;
+    font-weight: bold;
+    background: #06c286;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+.balloon3-left:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -6.5px;
+    margin-top: -3px;
+    border: 3px solid transparent;
+    border-right: 5px solid #06c286;
+    z-index: 0;
+}
+/* ------------------ */
+
+.profile,.profile2{
+    pointer-events: none;
+}
+
+.rply{
+    display: flex;
+    justify-content: flex-end;
+}
+
 .balloon3-left {
     position: relative;
     display: inline-block;

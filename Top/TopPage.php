@@ -100,6 +100,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ?>
             </div>
             <!-- 入力フォーム -->
+            <?php
+            if (isset($_SESSION['users'])) {
+                $userID = $_SESSION['users']['userID'];
+            } else {
+                $userID = 0; // 例: ログインしていないユーザーのためのデフォルト値
+            }
+            ?>
             <div class="send">
                 <form action="TopPage.php" method="post" enctype="multipart/form-data" class="text-box">
                     <input type="hidden" name="userID" value="">
