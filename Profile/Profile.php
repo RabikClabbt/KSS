@@ -12,6 +12,8 @@ $user = $_SESSION['users'];
 $pdo = new PDO($connect, user, pass);
 ?>
 
+<?php require '../Header/Header.php'; ?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -54,8 +56,8 @@ $pdo = new PDO($connect, user, pass);
                 echo '<p>' . htmlspecialchars($comment['commentText']) . '</p>';
                 echo '</div>';
                 echo '<div class="comment-reactions">';
-                echo '<button>👍</button>';
-                echo '<button>😂</button>';
+                echo '<button class="custom-button">👍</button>';
+                echo '<button class="custom-button">😂</button>';
                 echo '</div>';
                 echo '</div>';
                 echo '</div>';
