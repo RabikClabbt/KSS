@@ -2,6 +2,9 @@
 session_start();
 require '../db-connect.php';
 
+// $pdoを定義する
+$pdo = new PDO($connect, user, pass);
+
 if (!isset($_SESSION['users'])) {
     header('Location: Login.php');
     exit;
@@ -39,6 +42,6 @@ $sql->execute([$nickname, $profileIcon, $userID]);
 $_SESSION['users']['name'] = $nickname;
 $_SESSION['users']['icon'] = $profileIcon;
 
-    header('Location: Profile.php');
-    exit;
+header('Location: Profile.php');
+exit;
 ?>
