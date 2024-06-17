@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require '../db-connect.php';
 $pdo = new PDO($connect, user, pass);
@@ -13,15 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // ファイルがアップロードされた場合
     if (is_uploaded_file($_FILES['file']['tmp_name'])) {
         if (!file_exists('File')) {
-            if (!mkdir('File')) {
-                die('Failed to create directory.');
-            }
+            mkdir('File');
         }
         $file = './File/' . basename($_FILES['file']['name']);
         if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
             echo 'File uploaded successfully.';
         } else {
-            die('Failed to move uploaded file.');
+            //アップロードされたファイルの移動に失敗
         }
     }else{
         $file="";
@@ -129,6 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="sideber2">
                 <p>トップ画面だよ</p>
+
             </div>
         </div>
     </div>
