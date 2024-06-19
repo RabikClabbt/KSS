@@ -69,3 +69,13 @@ body {
     color: white;
     font-size: 1em;
 }
+
+.error {
+    color: red;
+    font-size: 12px;
+}
+
+.success {
+    color: green;
+    font-size: 12px;
+}
