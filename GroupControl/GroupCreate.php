@@ -9,34 +9,13 @@ function uploadImage($file) {
     }
 
     $targetFile = $targetDir . basename($file["name"]);
-    $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-
-    // 画像ファイルが本物かどうかをチェック
-    /*
-    $check = getimagesize($file["tmp_name"]);
-    if ($check === false) {
-        return [false, "ファイルは画像ではありません。"];
-    }
-    */
-
-    // 許可されたファイル形式をチェック
-    /*
-    $allowedTypes = ["jpg", "jpeg", "png", "gif"];
-    if (!in_array($imageFileType, $allowedTypes)) {
-        return [false, "申し訳ありませんが、JPG、JPEG、PNG、GIFファイルのみ許可されています。"];
-    }
-    */
 
     // 画像がアップロードされていない場合、デフォルトの画像を設定
     if ($file['error'] == UPLOAD_ERR_NO_FILE) {
-        $defaultImage = 'defaultGroupIcon.svg';//デフォルトの画像
+        $defaultImage = '../Image/defaultGroupIcon.svg'; // デフォルトの画像
         return [true, $defaultImage];
     }
-
-    $targetFile = $targetDir . basename($file["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
     // ファイルをアップロード
     if (move_uploaded_file($file["tmp_name"], $targetFile)) {
@@ -66,16 +45,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $groupName = $_POST['groupName'];
     $adminId = $_POST['adminId'];
 
+    $sql = $pdo->prepare('select * from Users where userID = ?');
+    $sql->execute([$adminId]);
+    $user = $sql->fetch();
+
     if (empty($groupName)) {
         $errorMsg = "グループ名を入力してください";
     } else if (empty($adminId)) {
         $errorMsg = "ユーザーIDを入力してください";
+    } else if (!$user){
+        $errorMsg = "入力したユーザーIDは存在しません";
     } else {
         list($uploadOk, $uploadMsg) = uploadImage($_FILES["groupIcon"]);
         if ($uploadOk) {
             $resultMsg = insertGroupData($pdo, $groupName, $adminId, $uploadMsg);
-            // グループ作成が成功したら、トップ画面に遷移
-            header("Location: ../Top/TopPage.php");
+            // グループ作成が成功したら、グループ管理画面に遷移
+            header("Location: ./GroupControl.php");
             exit();
         } else {
             $errorMsg = $uploadMsg;
@@ -99,12 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="group-container">
             <h1 class="group-title">グループ作成</h1>
 
-            <?php if (isset($errorMsg)): ?>
-                <p class="error"><?= htmlspecialchars($errorMsg) ?></p>
-            <?php elseif (isset($resultMsg)): ?>
-                <p class="success"><?= htmlspecialchars($resultMsg) ?></p>
-            <?php endif; ?>
-
             <form action="" method="post" enctype="multipart/form-data">
                 <p class="group-name">グループ名<br>
                     <input class="group-input" type="text" name="groupName" required>
@@ -115,7 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <input id="groupIcon" type="file" name="groupIcon" accept="image/*" onchange="previewImage(event)">
                 </p>
 
-                <img id="preview" class="circle-icon" style="display:none;">
+                <!-- 初期状態でデフォルトアイコンを表示 -->
+                <img id="preview" class="circle-icon" src="../Image/defaultGroupIcon.svg" alt="グループアイコン">
 
                 <?php
                 $userId = '';
@@ -126,6 +106,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <p class="group-userId">管理者のユーザーIDを入力<br>
                     <input class="group-input" type="text" name="adminId" value="<?= htmlspecialchars($userId) ?>">
                 </p>
+
+                <?php if (isset($errorMsg)): ?>
+                    <p class="error"><?= htmlspecialchars($errorMsg) ?></p>
+                <?php elseif (isset($resultMsg)): ?>
+                    <p class="success"><?= htmlspecialchars($resultMsg) ?></p>
+                <?php endif; ?>
 
                 <p><button class="group-button" type="submit">作成する</button></p>
             </form>
@@ -140,7 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             reader.onload = function(){
                 var output = document.getElementById('preview');
                 output.src = reader.result;
-                output.style.display = 'block';
             }
             reader.readAsDataURL(event.target.files[0]);
         }

@@ -51,8 +51,7 @@ body {
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    display: none;
-    margin: 20px auto;
+    border: 1px solid #ccc;
 }
 
 .group-button{
@@ -72,10 +71,10 @@ body {
 
 .error {
     color: red;
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .success {
     color: green;
-    font-size: 12px;
+    font-size: 16px;
 }
