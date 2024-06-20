@@ -36,7 +36,7 @@ a{
 .global-chat{
     overflow: auto;
     width: 100%;
-    height: 85%;
+    height: 89%;
 }
 .global-chat::-webkit-scrollbar{
     width: 7px;
@@ -114,7 +114,10 @@ a{
     width: 70px;
     padding-left: 3px;
 }
-
+.icon-img{
+    width: 40px;
+    height: 40px;
+}
 .sideber2 {
     background-color: #575757;
     display: flex;
@@ -128,7 +131,7 @@ a{
     height: 50px;
     border: 3px solid #06c286;
     border-radius: 15px; /* 丸みを帯びた縁を設定 */
-    padding: 5px;
+    padding: 2.5px;
     margin: 5px;
 }
 
@@ -139,7 +142,9 @@ a{
     position: absolute; /* 絶対配置 */
     left: 2px;
     bottom: 0; /* 下端に配置 */
-    width: 100%;
+    width: 85%;
+    margin-right: 7.5%;
+    margin-left: 7.5%;
     justify-content: space-between; /* 左右に均等にスペースを配置 */
     align-items: center; /* 上下中央に配置 */
 }

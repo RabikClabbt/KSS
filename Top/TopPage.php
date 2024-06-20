@@ -19,12 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $file = './File/' . basename($_FILES['file']['name']);
         if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
-            echo 'File uploaded successfully.';
-        } else {
-            die('Failed to move uploaded file.');
         }
     }else{
-        $file="";
+        $file=null;
     }
     $sql = $pdo->prepare('INSERT INTO GlobalChat (userID, commentText, appendFile) VALUES (?, ?, ?)');
     $sql->execute([$userid,$commentText,$file]);
@@ -48,11 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             const fileName = input.files[0]?.name || '';
             document.querySelector('.chat-text').value = fileName;
         }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const globalChat = document.querySelector('.global-chat');
-            globalChat.scrollTop = globalChat.scrollHeight;
-        });
     </script>
 </head>
 <body>
@@ -63,19 +55,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="content">
             <div class="sideber">
                 <div class="menu-icon" onclick="goToPage('../Question/ListForum.php')" title="Q&A">
-                    <img src="../image/Q&A.svg" alt="Q&A" class="icon-img">
+                    <img src="../image/Q&A.png" alt="Q&A" class="icon-img" >
                 </div>
                 <div class="menu-icon" onclick="goToPage('page2.php')" title="chat">
-                    <img src="../image/Chat.svg" alt="chat" class="icon-img">
+                    <img src="../image/Chat.png" alt="chat" class="icon-img">
                 </div>
                 <div class="menu-icon" onclick="goToPage('../GroupControl/GroupCreate.php')" title="group-chat">
-                    <img src="../image/GroupChat.svg" alt="group-chat" class="icon-img">
+                    <img src="../image/GroupChat.png" alt="group-chat" class="icon-img">
                 </div>
             </div>
             <div class="main-content">
                 <div class="global-chat">
                     <?php
-                    $user = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID ORDER BY g.commentID ASC');
+                    $user = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID ORDER BY g.commentID DESC');
                     $user->execute();
                     $questions = $user->fetchAll(PDO::FETCH_ASSOC);
                     $rply = $pdo->prepare('SELECT COUNT(*) as rplyCount FROM GlobalChat WHERE replyID = ?');
@@ -91,20 +83,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         if (!empty($row['profileIcon'])) {
                                             ?><a href="../相手のプロフィール?userID=<?= $row['userID'] ?>"><img src="<?php htmlspecialchars($row['profileIcon']) ?>" alt="ProfileImage"></a><?php
                                         } else {
-                                            ?><img src="../image/DefaultIcon.svg" alt="ProfileImage"><?php
+                                            ?><img src="../image/DefaultIcon.png" alt="ProfileImage"><?php
                                         }?>
                                     </div>
                                     <a href="../Profile/Profile.php?userID=<?= $row['userID'] ?>"><p class="account-name"><?= htmlspecialchars($row['nickname']) ?> </p></a>
                                 </div>
                             </form>
                             <a href="Globalrply.php?commentID=<?= $row['commentID'] ?>" class="linkrply atag">
-                                    <p class="comment"><?= htmlspecialchars($row['commentText']) ?></p></a>
+                                <p class="comment"><?= htmlspecialchars($row['commentText']) ?></p><?php
+                                if($row['appendFile']){?>
+                                    <img src="<?= $row['appendFile'] ?>" alt="画像を読み込めません"><?php
+                                }?>
+                            </a>
                             <div class="rply">
-                                    <img src="../image/RplyMark.svg" alt="rply" height="20" width="20">
+                                    <img src="../image/RplyMark.png" alt="rply" height="20" width="20">
                                     <div class="balloon3-left">
                                         <p><?= $rplyCount ?></p>
                                     </div>
-                                    <img src="../image/GoodSine.svg" alt="good" height="20" width="20">
                                 </div>
                             </div><?php
                         }
@@ -116,19 +111,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <form action="TopPage.php" method="post" enctype="multipart/form-data" class="text-box">
                         <input type="hidden" name="userID" value=<?= $userID ?>>
                         <input type="text" class="chat-text" placeholder="テキストを入力" name="commentText" spellcheck="false">
+                        <div class="image-preview">
+                            <img id="preview-image" src="" >
+                        </div>
                         <label for="file-upload" class="send-file">
-                            <img src="../image/FileIcon.svg" width="20" height="20" alt="ファイル添付">
+                            <img src="../image/FileIcon.png" width="20" height="20" alt="ファイル添付">
                         </label>
-                        <input type="file" id="file-upload" name="file" style="display: none;" onchange="displayFileName(this)">
+                        <input type="file" id="file-upload" name="file" style="display: none;" onchange="displayFileName()">
                         <button type="submit" class="send-button">
-                            <img src="../image/SendIcon.svg" width="20" height="20" alt="送信">
+                            <img src="../image/SendIcon.png" width="20" height="20" alt="送信">
                         </button>
                     </form>
                 </div>
+                <script>
+                    function displayFileName(input) {
+                        const fileName = input.files[0]?.name || '';
+                        document.querySelector('.chat-text').value = fileName;
+
+                        // 画像プレビューの表示
+                        const previewImage = document.getElementById('preview-image');
+                        if (input.files && input.files[0]) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                previewImage.src = e.target.result;
+                            };
+                            reader.readAsDataURL(input.files[0]);
+                        } else {
+                            previewImage.src = '';
+                        }
+                    }
+                </script>
                 <!-- ------------ -->
-            </div>
-            <div class="sideber2">
-                <p>トップ画面だよ</p>
             </div>
         </div>
     </div>
