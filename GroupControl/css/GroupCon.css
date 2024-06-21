@@ -1,0 +1,103 @@
+body {
+    background-color: #3b3b3b;
+}
+
+.group-container {
+    text-align: center;
+    margin: 50px auto;
+    width: 400px;
+    padding: 20px;
+    background-color: #4a4a4a;
+    border-radius: 10px;
+}
+
+.group-title {
+    color: #06c286;
+    margin-bottom: 20px;
+}
+
+.group-name,
+.group-icon,
+.group-userId,
+.error-message {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.group-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.group-icon {
+    position: relative;
+}
+
+.file-label {
+    cursor: pointer;
+    padding: 5px;
+    margin: 30px auto;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+#groupIcon {
+    display: none;
+}
+
+.circle-icon {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: none;
+    margin: 20px auto;
+}
+
+.current-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 20px auto;
+}
+
+.member-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.group-button {
+    display: inline-block;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #06C286;
+    border-radius: 5px;
+    background-color: #06C286;
+    color: white;
+    font-size: 1em;
+    text-align: center;
+}
+
+.message-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #06C286;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    z-index: 1000;
+}
