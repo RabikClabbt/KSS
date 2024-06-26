@@ -12,8 +12,6 @@ $user = $_SESSION['users'];
 $pdo = new PDO($connect, user, pass);
 ?>
 
-<?php require '../Header/Header.php'; ?>
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -25,6 +23,7 @@ $pdo = new PDO($connect, user, pass);
     <div class="profile-container">
         <div class="profile-header">
             <img src="<?php echo htmlspecialchars($user['icon']); ?>" alt="Profile Icon">
+
             <div class="profile-info">
                 <h1><?php echo htmlspecialchars($user['name']); ?></h1>
                 <p>#<?php echo htmlspecialchars($user['id']); ?></p>
@@ -54,10 +53,9 @@ $pdo = new PDO($connect, user, pass);
                 echo '</div>';
                 echo '<div class="comment-text">';
                 echo '<p>' . htmlspecialchars($comment['commentText']) . '</p>';
-                echo '</div>';
                 echo '<div class="comment-reactions">';
-                echo '<button class="custom-button">👍</button>';
-                echo '<button class="custom-button">😂</button>';
+                echo '<button>👍</button>';
+                echo '<button>😂</button>';
                 echo '</div>';
                 echo '</div>';
                 echo '</div>';
