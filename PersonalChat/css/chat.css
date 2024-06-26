@@ -1,17 +1,63 @@
-.text{
-    background-color: #808080;
-    border-color: #808080;
-    border-radius: 0.4em;
-    position:relative;
-    top:600px;
-    left:80px;
+body {
+    background-color: #313131;
 }
 
-.button{
-    background-color: #66cdaa;
-    border-color: #66cdaa;
-    border-radius: 0.4em;
-    position:relative;
-    top:600px;
-    left:80px;
+/* 固定フッターのスタイル */
+.Cfunction {
+    position: fixed;
+    bottom: 0;
+    width: 70%;
+    padding: 10px; /* 必要に応じてパディングを設定 */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 上部に影を追加 */
+    display: flex;
+    align-items: center;
+}
+
+.text {
+    flex-grow: 1;
+    margin-right: 5px; /* ボタンとの間にスペースを追加 */
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #808080;
+    border-color: #808080;
+    width: 450px;
+    height:20px;
+}
+
+.button {
+    background-color: transparent;
+    border: none;
+}
+
+.button img {
+    width: 20px; /* アイコンのサイズ */
+    height: 20px;
+}
+
+.my {
+    color:white;
+    padding-left: 10%;
+}
+
+.partner {
+    color:white;
+    padding-left: 60%;
+}
+
+.chat-all{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.chat-history{
+    width:70%;
+    display: flex;
+    flex-direction: column; 
+}
+
+.space{
+    width:30%;
+    display: flex;
+    flex-direction: column; 
 }

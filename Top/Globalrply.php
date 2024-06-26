@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header('Location: ' . $_SERVER['PHP_SELF']);
     exit();
 }
-if (isset($_GET['commentID'])) {
+if (isset($_POST['commentID'])) {
     $commentID = htmlspecialchars($_GET['commentID']);
     // 元のコメントを取得
     $sql = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID WHERE g.commentID = ?');
