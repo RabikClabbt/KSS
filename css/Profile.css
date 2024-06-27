@@ -58,69 +58,76 @@ body {
     background-color: #218838;
 }
 
-.comments-section {
-    margin-top: 20px;
-}
-
-.comments-section h2 {
-    margin-top: 0;
+.profile-comments h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
 }
 
 .comment {
-    background-color: #3B3B3B;
+    background-color: #36393f;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
     display: flex;
+    flex-direction: column;
 }
 
-.account-image {
-    flex: 0 0 auto;
-    width: 50px;
-    height: 50px;
+.comment-user {
+    display: flex;
+    align-items: center;
+}
+
+.comment-user-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     margin-right: 10px;
 }
 
-.account-image img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
+.comment p {
+    margin: 0 0 10px;
 }
 
-.comment-content {
-    flex-grow: 1;
-}
-
-.comment-header { /* 追加 */
-    display: flex; /* 追加 */
-    align-items: center; /* 追加 */
-}
-
-.comment-header .nickname { /* 追加 */
-    margin-right: 10px; /* 追加 */
-    font-weight: bold; /* 追加 */
-    color: #fff; /* 追加 */
-}
-
-.comment-text {
-    margin-bottom: 10px;
-}
-
-.comment-reactions {
+.rply {
     display: flex;
-    gap: 10px;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: flex-end; /* 右寄せに変更 */
 }
 
-.comment-reactions button {
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
+.balloon3-left {
+    position: relative;
+    display: inline-block;
+    margin: 0px 10px 1px 7px;
+    padding: 0 4px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #FFF;
+    font-size: 15px;
+    font-weight: bold;
+    background: #06c286;
+    border-radius: 50%;
+    box-sizing: border-box;
 }
 
-.comment-reactions button:hover {
-    color: #ccc;
+.balloon3-left:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -6.5px;
+    margin-top: -3px;
+    border: 3px solid transparent;
+    border-right: 5px solid #06c286;
+    z-index: 0;
+}
+
+.rply img {
+    margin-right: 5px;
+}
+
+.rply img:last-of-type {
+    margin-left: 5px;
 }
 
 .popup {
@@ -129,11 +136,11 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: #313131;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #06c286;
     border-radius: 10px;
-    color: black; /* ポップアップ内の文字色を黒に変更 */
+    color: #fff; /* ポップアップ内の文字色を黒に変更 */
 }
 
 .current-icon {
@@ -161,4 +168,14 @@ label, input {
 
 .logout-button:hover {
     background-color: #cc0000;
+}
+
+p {
+    color: #fff;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+    border: none;
 }
