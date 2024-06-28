@@ -17,9 +17,10 @@ if ($row && password_verify($_POST['pass'], $row['password'])) {
         'name' => $row['nickname'],
         'icon' => $row['profileIcon']
     ];
-    header('Location: ../GroupControl/GroupCreate.php');
+    header('Location: ../GroupChat/GroupChatIndex.php');
     exit;
 } else {
     header('Location: LoginAgain.php');
+    exit;
 }
 ?>

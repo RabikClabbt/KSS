@@ -29,12 +29,14 @@ function insertGroupData($pdo, $groupName, $adminId, $groupIcon) {
     try {
         $sql = $pdo->prepare('INSERT INTO `Group` (`groupName`, `groupIcon`, `admin`) VALUES (?, ?, ?)');
         if ($sql->execute([$groupName, $groupIcon, $adminId])) {
-            return "グループが正常に作成されました。";
+            // 最後に挿入された行のIDを取得
+            $groupId = $pdo->lastInsertId();
+            return [true, $groupId, "グループが正常に作成されました。"];
         } else {
-            return "グループ作成中にエラーが発生しました。";
+            return [false, null, "グループ作成中にエラーが発生しました。"];
         }
     } catch (PDOException $e) {
-        return 'データベースエラー: ' . $e->getMessage();
+        return [false, null, 'データベースエラー: ' . $e->getMessage()];
     }
 }
 
@@ -57,11 +59,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errorMsg = "入力したユーザーIDは存在しません";
     } else {
         list($uploadOk, $uploadMsg) = uploadImage($_FILES["groupIcon"]);
-        if ($uploadOk) {
-            $resultMsg = insertGroupData($pdo, $groupName, $adminId, $uploadMsg);
-            // グループ作成が成功したら、グループ管理画面に遷移
-            header("Location: ./GroupControl.php");
-            exit();
+        if($uploadOk){
+            if ($uploadOk) {
+                list($success, $groupId, $resultMsg) = insertGroupData($pdo, $groupName, $adminId, $uploadMsg);
+                //GroupChatテーブルにgroupIDを追加
+                $sqlIn = $pdo->prepare('insert into GroupChat (groupID, userID, commentID, commentText, appendFile) values (?, ?, ?, ?, ?)');
+                $sqlIn->execute([$groupId, $adminId, 0, '', '']);
+
+                // グループ作成が成功したら、グループ管理画面に遷移
+                header("Location: ./GroupControl.php");
+                exit();
+            } else {
+                $errorMsg = $resultMsg;
+            }
         } else {
             $errorMsg = $uploadMsg;
         }
@@ -117,7 +127,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
         </div>
     </main>
+
     <footer>
+
     </footer>
 
     <script>
