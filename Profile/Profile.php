@@ -22,8 +22,13 @@ $pdo = new PDO($connect , user , pass);
     <div class="profile-container">
         <div class="profile-header">
             <img src="<?php echo htmlspecialchars($user['icon']); ?>" alt="Profile Icon">
-            <h1><?php echo htmlspecialchars($user['name']); ?></h1>
-            <p>#<?php echo htmlspecialchars($user['id']); ?></p>
+
+            <div class="profile-info">
+                <h1><?php echo htmlspecialchars($user['name']); ?></h1>
+                <p>#<?php echo htmlspecialchars($user['id']); ?></p>
+            </div>
+        </div>
+        <div class="profile-buttons">
             <button onclick="openProfileEditPopup()">プロフィール情報の変更</button>
             <button onclick="location.href='UserInfoEdit.php'">ユーザー情報の変更</button>
         </div>
@@ -38,6 +43,7 @@ $pdo = new PDO($connect , user , pass);
                 echo '<div class="comment-reactions">';
                 echo '<button>👍</button>';
                 echo '<button>😂</button>';
+                echo '</div>';
                 echo '</div>';
                 echo '</div>';
             }
