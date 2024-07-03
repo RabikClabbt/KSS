@@ -3,6 +3,7 @@ body {
     margin: 0;
     min-height: 100vh;
     background-color: #313131;
+    overflow: hidden;
 }
 p {
     color: #fff;
@@ -12,16 +13,24 @@ a{
     color: inherit;
     border: none;
 }
-.post{
+.main-content{
+    height: calc(100% - 70px);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 /*------メインコメント--------*/
+.rplychat{
+    height: 78vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* 縦方向の配置 */
+    align-items: center;
+    overflow: auto;
+
+}
 .chat-comment{
-    position: relative;
     width: 80%;
-    min-height: 100px;
     padding: 5px;
     margin: 5px;
     background-color: #494949;
@@ -49,7 +58,7 @@ a{
     display: inline-block;
     margin: 0px 10px 1px 7px;
     padding: 0 4px;
-    width: 20px;
+    width: 30px;
     height: 20px;
     line-height: 22px;
     text-align: center;
@@ -57,7 +66,7 @@ a{
     font-size: 15px;
     font-weight: bold;
     background: #06c286;
-    border-radius: 50%;
+    border-radius: 30%;
     box-sizing: border-box;
 }
 .balloon3-left:before {
@@ -70,14 +79,45 @@ a{
     border-right: 5px solid #06c286;
     z-index: 0;
 }
-/*--------入力フォーム--------*/
+
+/*--------リプライ欄---------*/
+.rply-comments{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.rply-comment{
+    width: 70%;
+    position: relative;
+    min-height: 100px;
+    padding: 5px;
+    margin: 5px;
+    background-color: #494949;
+}
+.rplyaccount{
+    display: flex;
+    align-items: center;
+}
+.rplyaccount a{
+    display: block;
+}
+.rplyaccount-image{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* 円形の形状を作成 */
+    overflow: hidden; /* 画像が円内に収まるようにする */
+    border: 2px solid #06c286;
+}
+/*-----入力フォーム------*/
+
 .send {
     display: flex;
     border: 3px solid #06c286;
     border-radius: 15px; /* 丸みを帯びた縁を設定 */
+    position: absolute; /* 絶対配置 */
     bottom: 0; /* 下端に配置 */
-    left: 2px;
-    width: 80%;
+    width: 90%;
     justify-content: space-between; /* 左右に均等にスペースを配置 */
     align-items: center; /* 上下中央に配置 */
 }
@@ -110,32 +150,4 @@ a{
 .send-button img, .send-file img {
     width: 20px;
     height: 20px;
-}
-/*-------------------------*/
-.rply-comments{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.rply-comment{
-    position: relative;
-    width: 75%;
-    min-height: 100px;
-    padding: 5px;
-    margin: 5px;
-    background-color: #494949;
-}
-.rplyaccount{
-    display: flex;
-    align-items: center;
-}
-.rplyaccount a{
-    display: block;
-}
-.rplyaccount-image{
-    width: 40px;
-    height: 40px;
-    border-radius: 50%; /* 円形の形状を作成 */
-    overflow: hidden; /* 画像が円内に収まるようにする */
-    border: 2px solid #06c286;
 }

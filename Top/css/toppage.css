@@ -84,7 +84,7 @@ a{
     display: inline-block;
     margin: 0px 10px 1px 7px;
     padding: 0 4px;
-    width: 20px;
+    width: 30px;
     height: 20px;
     line-height: 20px;
     text-align: center;
@@ -92,7 +92,7 @@ a{
     font-size: 15px;
     font-weight: bold;
     background: #06c286;
-    border-radius: 50%;
+    border-radius: 30%;
     box-sizing: border-box;
 }
 .balloon3-left:before {
@@ -138,17 +138,16 @@ a{
     list-style-type: none;
 }
 
-.sideber li a {
+.sideber li label {
     width: 100%;
     display: flex;
-    align-items: center;
     text-decoration: none;
     color: #ffffff;
     padding: 8px;
     transition: background-color 0.3s ease;
 }
 
-.sideber li a:hover {
+.sideber li label:hover {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -185,8 +184,22 @@ a{
     opacity: 1;
     transition: opacity 0.3s ease, font-size 0.3s ease;
 }
-.menu-icon:hover .menu-text {
-    font-size: 20px; /* テキストのサイズを大きくする */
+
+.list {
+    display: none;
+}
+
+.sideber li:hover .menu-text + .list {
+    display: block;
+}
+
+.list {
+    padding-top: 5px;
+    border-top: 1px solid #06c286;
+}
+
+.listname:hover{
+    background-color: #585858;
 }
 /*-----入力フォーム------*/
 
