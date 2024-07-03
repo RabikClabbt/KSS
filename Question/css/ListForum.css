@@ -5,7 +5,6 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
     background-color: #2c2c2c;
     height: all;
     width: auto;
@@ -41,11 +40,7 @@ body {
 }
 
 main {
-    background-color: #313131;
     padding: 20px;
-}
-
-.container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -84,7 +79,7 @@ main {
     border: 3px solid #06c286;
     border-radius: 15px; /* 丸みを帯びた縁を設定 */
     background-color: transparent; /* 背景色を透明に */
-    color: #FFFFFF; /* テキストの色を白に */
+    color: #fff; /* テキストの色を白に */
     font-size: 12pt;
     padding-left: 10px; /* テキストのインデント */
 }
@@ -114,7 +109,7 @@ main {
     display: flex;
     flex-direction: column;
     width: 60%;
-    color: #ccc;
+    color: #fff;
 }
 
 .question {
@@ -143,10 +138,11 @@ main {
 
 .questionLink {
     text-decoration: none;
+    color: #fff;
 }
 
 .questionLink:visited {
-    color: #ccc;
+    color: #fff;
 }
 
 .questionLink:hover {
@@ -175,6 +171,14 @@ main {
     font-size: 20px;
     cursor: pointer;
     margin-left: 10px;
+}
+
+.noResult {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    margin: 0 auto;
 }
 
 /* ぺジネーションのスタイル */
