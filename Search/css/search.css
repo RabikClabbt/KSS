@@ -21,8 +21,8 @@ main {
     border-color: #808080;
     border-radius: 0.4em;
     margin-right: 10px;
-    width: 450px;
-    height:20px;
+    width: 500px;
+    height:30px;
 }
 
 .Sfunction button {
@@ -64,4 +64,10 @@ h2{
 
 .user .circle {
     margin-right: 15px;
+}
+
+.question{
+    margin-bottom:10px;
+    background-color: #3B3B3B;
+    border-radius: 5px;
 }

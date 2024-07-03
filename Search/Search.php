@@ -85,10 +85,9 @@ require 'db-connect.php';
                     if ($sql->rowCount() > 0) {
                         foreach ($sql as $row) { ?>
                             <div class="question">
-                                <img src="image/icon.png" width="30" height="30"><br>
+                                <img src="image/icon.png" width="30" height="30">
                                 <div class="userID"><?= $row['userID']; ?></div><br>
                                 <div class="questionTitle"><?= $row['questionTitle']; ?></div><br>
-                                <div class="questionText"><?= $row['questionText']; ?></div><br>
                             </div>
                         <?php }
                     } else {
@@ -98,10 +97,9 @@ require 'db-connect.php';
                     $sql = $pdo->query('select * from Question');
                     foreach ($sql as $row) { ?>
                         <div class="question">
-                            <img src="image/icon.png" width="30" height="30"><br>
+                            <img src="image/icon.png" width="30" height="30">
                             <div class="userID"><?= $row['userID']; ?></div><br>
                             <div class="questionTitle"><?= $row['questionTitle']; ?></div><br>
-                            <div class="questionText"><?= $row['questionText']; ?></div><br>
                         </div>
                     <?php }
                 }
