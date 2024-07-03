@@ -23,13 +23,14 @@ a{
 }
 /* ---メインコンテンツ--- */
 .main-content {
+    margin-left: 70px;
     height: calc(100% - 5px);
     flex-grow: 1;
     position: relative; /* 相対配置 */
     display: flex;
     flex-direction: column; /* 縦方向の配置 */
-    align-items: flex-end; /* 下端に配置 */
-    width: calc(100% - 70px - 20%); /* サイドバーの幅を差し引いた幅 */
+    align-items: center;
+    width: calc(100% - 70px); /* サイドバーの幅を差し引いた幅 */
     padding: 10px; /* 下部のパディング */
 }
 
@@ -83,7 +84,7 @@ a{
     display: inline-block;
     margin: 0px 10px 1px 7px;
     padding: 0 4px;
-    width: 20px;
+    width: 30px;
     height: 20px;
     line-height: 20px;
     text-align: center;
@@ -91,7 +92,7 @@ a{
     font-size: 15px;
     font-weight: bold;
     background: #06c286;
-    border-radius: 50%;
+    border-radius: 30%;
     box-sizing: border-box;
 }
 .balloon3-left:before {
@@ -104,47 +105,111 @@ a{
     border-right: 5px solid #06c286;
     z-index: 0;
 }
-/* ------------------ */
-
+/* --------サイドバー---------- */
 .sideber {
-    background-color: #575757;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 70px;
-    padding-left: 3px;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    overflow: hidden;
+    width: 70px; /* 幅を調整 */
+    height: 100%;
+    transition: width 0.6s ease;
+    transform: translateZ(0) scale(1, 1);
+    background: #494949;
 }
-.icon-img{
-    width: 40px;
-    height: 40px;
+
+.sideber:hover {
+    overflow: visible;
+    width: 150px; /* ホバー時の幅を調整 */
 }
-.sideber2 {
-    background-color: #575757;
+
+.sideber ul {
+    margin: 7px 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.sideber li {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.sideber li label {
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    width: 20%;
-    padding-left: 3px;
+    text-decoration: none;
+    color: #ffffff;
+    padding: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.sideber li label:hover {
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .menu-icon {
+    width: 55px;
+    height: 55px;
+    border: 3px solid #06c286;
+    border-radius: 15px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-img {
     width: 50px;
     height: 50px;
-    border: 3px solid #06c286;
-    border-radius: 15px; /* 丸みを帯びた縁を設定 */
-    padding: 2.5px;
-    margin: 5px;
+    padding: 2px;
+    border-radius: 12px; /* アイコンの角を丸くする */
 }
+
+.menu-text {
+    font-size: 18px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sideber li:hover .menu-text {
+    opacity: 1;
+}
+
+.sideber:hover .menu-text {
+    opacity: 1;
+    transition: opacity 0.3s ease, font-size 0.3s ease;
+}
+
+.list {
+    display: none;
+}
+
+.sideber li:hover .menu-text + .list {
+    display: block;
+}
+
+.list {
+    padding-top: 5px;
+    border-top: 1px solid #06c286;
+}
+
+.listname:hover{
+    background-color: #585858;
+}
+/*-----入力フォーム------*/
 
 .send {
     display: flex;
     border: 3px solid #06c286;
     border-radius: 15px; /* 丸みを帯びた縁を設定 */
     position: absolute; /* 絶対配置 */
-    left: 2px;
     bottom: 0; /* 下端に配置 */
-    width: 85%;
-    margin-right: 7.5%;
-    margin-left: 7.5%;
+    width: 90%;
     justify-content: space-between; /* 左右に均等にスペースを配置 */
     align-items: center; /* 上下中央に配置 */
 }
