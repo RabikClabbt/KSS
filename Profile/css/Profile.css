@@ -1,0 +1,164 @@
+body {
+    background-color: #313131;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.profile-container {
+    width: 50%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-header img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.profile-info {
+    flex-grow: 1;
+}
+
+.profile-info h1 {
+    margin: 0;
+    font-size: 40px;
+}
+
+.profile-info p {
+    margin: 5px 0 0;
+}
+
+.profile-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.profile-buttons button {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+}
+
+.profile-buttons button:hover {
+    background-color: #218838;
+}
+
+.comments-section {
+    margin-top: 20px;
+}
+
+.comments-section h2 {
+    margin-top: 0;
+}
+
+.comment {
+    background-color: #3B3B3B;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.account-image {
+    flex: 0 0 auto;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.account-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.comment-content {
+    flex-grow: 1;
+}
+
+.comment-header { /* 追加 */
+    display: flex; /* 追加 */
+    align-items: center; /* 追加 */
+}
+
+.comment-header .nickname { /* 追加 */
+    margin-right: 10px; /* 追加 */
+    font-weight: bold; /* 追加 */
+    color: #fff; /* 追加 */
+}
+
+.comment-text {
+    margin-bottom: 10px;
+}
+
+.comment-reactions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.comment-reactions button {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.comment-reactions button:hover {
+    color: #ccc;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    color: black; /* ポップアップ内の文字色を黒に変更 */
+}
+
+.current-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+label, input {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.logout-button {
+    position: absolute;
+    top: 90px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background-color: #cc0000;
+}

@@ -1,0 +1,67 @@
+body{
+    background-color: #313131;
+}
+
+main {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.Sfunction{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin: 25px;
+}
+
+.Sfunction .text{
+    background-color: #808080;
+    border-color: #808080;
+    border-radius: 0.4em;
+    margin-right: 10px;
+    width: 450px;
+    height:20px;
+}
+
+.Sfunction button {
+    background-color: transparent;
+    border: none;
+}
+
+.Sfunction button img {
+    width: 20px;
+    height: 20px;
+}
+
+.result {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.userResult, .questionResult{
+    width: 50%;
+    display: flex;
+    flex-direction: column; 
+}
+
+h2{
+    top:25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+    padding-left: 30%;
+}
+
+.user .circle {
+    margin-right: 15px;
+}
