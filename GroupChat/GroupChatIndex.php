@@ -5,8 +5,8 @@
         exit;
     }
     $userID = $_SESSION['users']['id'];
-    // グループIDはURLパラメータから取得する
-    $groupID = $_GET['groupID'];
+    // セッションを使い、所属するgroupIDを取得する
+    $groupID = $_SESSION['groupID'];
 ?>
 
 <!DOCTYPE html>
