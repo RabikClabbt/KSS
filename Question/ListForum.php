@@ -21,31 +21,28 @@ $totalCount = $conn->query("SELECT COUNT(*) FROM Question WHERE questionTitle LI
 <html lang="ja">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>タイトル</title>
+    <title>Yadi-X 質問フォーラム</title>
     <link rel="stylesheet" type="text/css" href="./css/ListForum.css">
 </head>
 <body>
       <header>
             <!-- Header.htmlを読み込む -->
             <div id="external-content"></div>
-            <?php include '../Header/Header.php' ?>
+            <?php require '../Header/Header.php' ?>
             <div class="categorylist">
-                <a href="#">生活</a>
-                <a href="#">学校</a>
-                <a href="#">勉強</a>
-                <a href="#">テクノロジー</a>
-                <a href="#">その他</a>
+                <div class="category1">
+
+                </div>
             </div>
       </header>
-      <main class="container">
+      <main>
         <div class="control">
-            <button class="post-question">質問を投稿する</button>
+            <button class="post-question" onclick="location.href='./PostForm.php'">質問を投稿する</button>
             <div class="post-search">
                 <form action="<?= $_SERVER['PHP_SELF'] ?>" method="get">
                     <input type="text" autocomplete="off" aria-autocomplete="list" aria-controls="react-autowhatever-1" class="post-search-input" placeholder="質問キーワードを入力" name="keyword" value="<?= htmlspecialchars($keyword) ?>" spellcheck="false" data-ms-editor="true">
                     <button type="submit" class="post-search-button">
-                        <img src="../image/SearchIcon.svg" width="20" height="20" alt="検索">
+                        <img src="../image/SearchIcon.svg" alt="検索">
                     </button>
                 </form>
             </div>
