@@ -51,6 +51,7 @@ body {
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
+    border: 1px solid #ccc;
     display: none;
     margin: 20px auto;
 }
@@ -68,4 +69,15 @@ body {
     background-color: #06C286;
     color: white;
     font-size: 1em;
+}
+
+.error {
+    color: red;
+    font-size: 16px;
+}
+
+.success {
+    color: green;
+    font-size: 16px;
+
 }

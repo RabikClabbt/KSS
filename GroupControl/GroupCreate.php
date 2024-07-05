@@ -1,5 +1,83 @@
-<?php session_start(); ?>
+<?php
+session_start();
+require '../db-connect.php';
 
+function uploadImage($file) {
+    $targetDir = "uploads/";
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0777, true);
+    }
+
+    $targetFile = $targetDir . basename($file["name"]);
+    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+    // 画像がアップロードされていない場合、デフォルトの画像を設定
+    if ($file['error'] == UPLOAD_ERR_NO_FILE) {
+        $defaultImage = '../Image/defaultGroupIcon.svg'; // デフォルトの画像
+        return [true, $defaultImage];
+    }
+
+    // ファイルをアップロード
+    if (move_uploaded_file($file["tmp_name"], $targetFile)) {
+        return [true, $targetFile];
+    } else {
+        return [false, "ファイルのアップロード中にエラーが発生しました。"];
+    }
+}
+
+function insertGroupData($pdo, $groupName, $adminId, $groupIcon) {
+    try {
+        $sql = $pdo->prepare('INSERT INTO `Group` (`groupName`, `groupIcon`, `admin`) VALUES (?, ?, ?)');
+        if ($sql->execute([$groupName, $groupIcon, $adminId])) {
+            // 最後に挿入された行のIDを取得
+            $groupId = $pdo->lastInsertId();
+            return [true, $groupId, "グループが正常に作成されました。"];
+        } else {
+            return [false, null, "グループ作成中にエラーが発生しました。"];
+        }
+    } catch (PDOException $e) {
+        return [false, null, 'データベースエラー: ' . $e->getMessage()];
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $pdo = new PDO($connect, user, pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $groupName = $_POST['groupName'];
+    $adminId = $_POST['adminId'];
+
+    $sql = $pdo->prepare('select * from Users where userID = ?');
+    $sql->execute([$adminId]);
+    $user = $sql->fetch();
+
+    if (empty($groupName)) {
+        $errorMsg = "グループ名を入力してください";
+    } else if (empty($adminId)) {
+        $errorMsg = "ユーザーIDを入力してください";
+    } else if (!$user){
+        $errorMsg = "入力したユーザーIDは存在しません";
+    } else {
+        list($uploadOk, $uploadMsg) = uploadImage($_FILES["groupIcon"]);
+        if($uploadOk){
+            if ($uploadOk) {
+                list($success, $groupId, $resultMsg) = insertGroupData($pdo, $groupName, $adminId, $uploadMsg);
+                //GroupChatテーブルにgroupIDを追加
+                $sqlIn = $pdo->prepare('insert into GroupChat (groupID, userID, commentID, commentText, appendFile) values (?, ?, ?, ?, ?)');
+                $sqlIn->execute([$groupId, $adminId, 0, '', '']);
+
+                // グループ作成が成功したら、グループ管理画面に遷移
+                header("Location: ./GroupControl.php");
+                exit();
+            } else {
+                $errorMsg = $resultMsg;
+            }
+        } else {
+            $errorMsg = $uploadMsg;
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -8,79 +86,61 @@
     <title>グループ作成画面</title>
     <link rel="stylesheet" type="text/css" href="css/GroupCre.css">
 </head>
-
 <body>
     <header>
-        <!-- Header.phpを読み込む -->
         <include src="../Header/Header.php"></include>
     </header>
     <main>
-        <h1>グループを作成</h1>
+        <div class="group-container">
+            <h1 class="group-title">グループ作成</h1>
 
-        <?php
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $groupName = $_POST['groupName'];
-            $adminId = $_POST['adminId'];
-            $targetDir = "uploads/";
-            $targetFile = $targetDir . basename($_FILES["groupIcon"]["name"]);
-            $uploadOk = 1;
-            $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+            <form action="" method="post" enctype="multipart/form-data">
+                <p class="group-name">グループ名<br>
+                    <input class="group-input" type="text" name="groupName" required>
+                </p>
 
-            // 画像ファイルが本物かどうかをチェック
-            $check = getimagesize($_FILES["groupIcon"]["tmp_name"]);
-            if ($check !== false) {
-                echo "ファイルは画像です - " . $check["mime"] . ".";
-                $uploadOk = 1;
-            } else {
-                echo "ファイルは画像ではありません。";
-                $uploadOk = 0;
-            }
+                <p class="group-icon">
+                    <label for="groupIcon" class="file-label">グループのアイコンを設定</label>
+                    <input id="groupIcon" type="file" name="groupIcon" accept="image/*" onchange="previewImage(event)">
+                </p>
 
-            // 許可されたファイル形式をチェック
-            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-                echo "申し訳ありませんが、JPG、JPEG、PNG、GIFファイルのみ許可されています。";
-                $uploadOk = 0;
-            }
+                <!-- 初期状態でデフォルトアイコンを表示 -->
+                <img id="preview" class="circle-icon" src="../Image/defaultGroupIcon.svg" alt="グループアイコン">
 
-            // エラーチェック後、ファイルをアップロード
-            if ($uploadOk == 0) {
-                echo "申し訳ありませんが、ファイルはアップロードされませんでした。";
-            } else {
-                if (move_uploaded_file($_FILES["groupIcon"]["tmp_name"], $targetFile)) {
-                    echo "ファイル ". htmlspecialchars(basename($_FILES["groupIcon"]["name"])) . " がアップロードされました。";
-                    // グループデータをデータベースに保存する。$groupName、$adminId、$targetFile（アイコンのパス）を使用する
-                    // データベース接続と挿入ロジックをここに記述
-                } else {
-                    echo "申し訳ありませんが、ファイルのアップロード中にエラーが発生しました。";
+                <?php
+                $userId = '';
+                if (isset($_SESSION['users'])) {
+                    $userId = $_SESSION['users']['id'];
                 }
-            }
-        }
-        ?>
+                ?>
+                <p class="group-userId">管理者のユーザーIDを入力<br>
+                    <input class="group-input" type="text" name="adminId" value="<?= htmlspecialchars($userId) ?>">
+                </p>
 
-        <form action="" method="post" enctype="multipart/form-data">
-        <p>グループ名<br>
-            <input type="text" name="groupName" required>
-        </p>
+                <?php if (isset($errorMsg)): ?>
+                    <p class="error"><?= htmlspecialchars($errorMsg) ?></p>
+                <?php elseif (isset($resultMsg)): ?>
+                    <p class="success"><?= htmlspecialchars($resultMsg) ?></p>
+                <?php endif; ?>
 
-        <p>グループのアイコンを設定する<br>
-            <input type="file" name="groupIcon" accept="image/*" required>
-        </p>
-
-        <?php
-        $userId = '';
-        if(isset($_SESSION['users'])){
-            $userId = $_SESSION['users']['id'];
-        }
-        echo '<p>管理者のユーザーIDを入力<br>
-                  <input type="text" name="adminId" value="', $userId ,'">
-              </p>';
-        ?>
-
-        <button type="submit">作成する</button>
-        </form>
+                <p><button class="group-button" type="submit">作成する</button></p>
+            </form>
+        </div>
     </main>
+
     <footer>
-          
+
     </footer>
+
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('preview');
+                output.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 </body>
 </html>

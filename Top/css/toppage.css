@@ -21,7 +21,6 @@ a{
     flex-grow: 1;
     position: relative; /* relative positioning for main content */
 }
-/* ---メインコンテンツ--- */
 .main-content {
     margin-left: 70px;
     height: calc(100% - 5px);
@@ -49,10 +48,8 @@ a{
     background-color: #06c286;
 }
 .chat-comment{
-    position: relative;
     width: 80%;
     min-height: 100px;
-    padding: 5px;
     margin: 0 auto;
     background-color: #494949;
     margin-bottom: 3px;

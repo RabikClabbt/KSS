@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../db-connect.php';
+require 'db-connect.php';
 $pdo = new PDO($connect, user, pass);
 if (isset($_SESSION['users'])) {
     $userID = $_SESSION['users']['id'];
