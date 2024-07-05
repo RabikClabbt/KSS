@@ -36,7 +36,8 @@ if (!empty($results)) {
         ?>
         <div class="question">
             <div class="profile">
-                <a href="" class="profileLink">
+                <!-- 相手側のユーザーページへのリンク -->
+                <a href="#">
                     <div class="circle">
                         <?php if (!empty($profileIcon)) { ?>
                             <img src="<?= $profileIcon ?>" alt="profileIcon">
@@ -47,7 +48,7 @@ if (!empty($results)) {
                 </a>
                 <div class="nickname"><?= htmlspecialchars($nickname) ?></div>
             </div>
-            <a href="" class="questionLink">
+            <a href="./Detail.php?questionID=<?= $questionID ?>" class="questionLink">
                 <div class="questionTitle"><?= htmlspecialchars($questionTitle) ?></div>
             </a>
             <div class="questionText"><?= htmlspecialchars($questionText) ?></div>
@@ -56,5 +57,10 @@ if (!empty($results)) {
         <?php
     }
 } else {
-    echo "質問が見つかりませんでした。";
+    ?>
+    <div class="noResult">
+        <p>お探しの質問は見つかりませんでした。</p>
+        <p>別のキーワードを検索してみてください。</p>
+    </div>
+    <?php
 }
