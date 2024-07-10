@@ -45,11 +45,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="content">
             <div class="sideber">
                 <?php
-                $chatsql=$pdo->prepare("SELECT d.*, u.* FROM DirectMessage d JOIN Users u ON d.partnerID = u.userID WHERE d.userID = ?");
-                $chatsql->execute([$userID]);
+                $chatsql=$pdo->prepare("SELECT d.*, u.* FROM DirectMessage d JOIN Users u ON (d.userID = u.userID OR d.partnerID = u.userID) WHERE (d.userID = ? AND d.partnerID = u.userID) OR (d.partnerID = ? AND d.userID = u.userID)");
+                $chatsql->execute([$userID,$userID]);
                 $directchat = $chatsql->fetchAll(PDO::FETCH_ASSOC);
                 ?>
                 <ul>
+                    <li>
+                        <label>
+                            <div class="menu-icon">
+                                <a href="../Search/Search.php">
+                                    <img src="../image/SearchIcon.png" alt="Search" class="icon-img-search">
+                                </a>
+                            </div>
+                            <a href="../Search/Search.php"><span class="menu-text">Search</span></a>
+                        </label>
+                    </li>
                     <li>
                         <label>
                             <div class="menu-icon">
@@ -71,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="list">
                                         <?php
                                         foreach($directchat as $chat){
-                                            ?><p class="listname"><a href="../SC/PersonalChat.php?partnerID=<?= $chat['userID'] ?>"> <?= $chat['nickname'] ?></a></p><?php
+                                            ?><p class="listname"><a href="../PersonalChat/PersonalChat.php?partnerID=<?= $chat['userID'] ?>"> <?= $chat['nickname'] ?></a></p><?php
                                         }
                                         ?>
                                     </div>
@@ -121,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="account">
                                     <div class="account-image"><?php
                                         if (!empty($row['profileIcon'])) {
-                                            ?><a href="../Profile/OtherProfile.php?userID=<?= $row['userID'] ?>"><img src="<?php htmlspecialchars($row['profileIcon']) ?>" alt="ProfileImage"></a><?php
+                                            ?><a href="../Profile/OtherProfile.php?userID=<?= $row['userID'] ?>"><img src="<?php htmlspecialchars($row['profileIcon']) ?>" alt="画像が読み込めません"></a><?php
                                         } else {
                                             ?><img src="../image/DefaultIcon.png" alt="ProfileImage"><?php
                                         }?>

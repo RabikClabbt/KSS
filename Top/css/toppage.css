@@ -68,6 +68,11 @@ a{
     overflow: hidden; /* 画像が円内に収まるようにする */
     border: 2px solid #06c286;
 }
+.account-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 .account button{
     border: none;
     background: transparent;
@@ -164,6 +169,15 @@ a{
     height: 50px;
     padding: 2px;
     border-radius: 12px; /* アイコンの角を丸くする */
+}
+
+.icon-img-search{
+    width: 40px;
+    height: 40px;
+    padding: 2px;
+    margin: 10px;
+    margin-top: 12px;
+    border-radius: 12px;
 }
 
 .menu-text {
