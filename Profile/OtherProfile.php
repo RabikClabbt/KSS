@@ -17,6 +17,15 @@ if (!isset($_GET['userID'])) {
 }
 
 $otherUserID = htmlspecialchars($_GET['userID']);
+
+// セッションIDとotherUserIDが一致する場合にProfile.phpにリダイレクト
+if (isset($_SESSION['users']['id']) && $_SESSION['users']['id'] == $otherUserID) {
+    echo '<script type="text/javascript">
+              window.location.href = "Profile.php";
+          </script>';
+    exit;
+}
+
 $sql = $pdo->prepare('SELECT * FROM Users WHERE userID = ?');
 $sql->execute([$otherUserID]);
 $user = $sql->fetch(PDO::FETCH_ASSOC);
