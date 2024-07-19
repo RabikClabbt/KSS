@@ -1,0 +1,294 @@
+body {
+    overflow: hidden;
+    margin: 0;
+    min-height: 100vh;
+    background-color: #313131;
+}
+
+p {
+    color: #fff;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+    border: none;
+}
+
+.screen{
+    height: 100vh;
+}
+
+.content {
+    height: calc(100% - 70px);
+    display: flex;
+    flex-grow: 1;
+    position: relative; /* relative positioning for main content */
+}
+
+.main-content {
+    margin-left: 70px;
+    height: calc(100% - 5px);
+    flex-grow: 0;
+    position: relative; /* 相対配置 */
+    display: flex;
+    flex-direction: column; /* 縦方向の配置 */
+    align-items: center;
+    width: calc(100% - 70px); /* サイドバーの幅を差し引いた幅 */
+    padding-top: 10px;
+}
+
+.global-chat{
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 60px;
+}
+
+.global-chat::-webkit-scrollbar{
+    width: 7px;
+}
+
+.global-chat::-webkit-scrollbar-track{
+    background-color: #ccc;
+}
+
+.global-chat::-webkit-scrollbar-thumb{
+    background-color: #06c286;
+}
+
+.chat-comment{
+    width: 80%;
+    min-height: 100px;
+    margin: 0 auto;
+    background-color: #494949;
+    margin-bottom: 3px;
+}
+
+.account{
+    display: flex;
+    align-items: center;
+}
+
+.account a{
+    display: block;
+    display: flex;
+}
+
+.account-image{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* 円形の形状を作成 */
+    overflow: hidden; /* 画像が円内に収まるようにする */
+    border: 3px solid #06c286;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.account-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* アスペクト比を保ちつつコンテナをカバーする */
+}
+
+.account button{
+    border: none;
+    background: transparent;
+}
+
+.linkrply-atag img {
+    height: 200px;
+    object-fit: cover; /* アスペクト比を保ちつつコンテナをカバーする */
+    margin: 15px;
+}
+
+.rply{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.balloon3-left {
+    position: relative;
+    display: inline-block;
+    margin: 0px 10px 1px 7px;
+    padding: 0 4px;
+    width: 30px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #FFF;
+    font-size: 15px;
+    font-weight: bold;
+    background: #06c286;
+    border-radius: 30%;
+    box-sizing: border-box;
+}
+
+.balloon3-left:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -6.5px;
+    margin-top: -3px;
+    border: 3px solid transparent;
+    border-right: 5px solid #06c286;
+    z-index: 0;
+}
+
+/* --------サイドバー---------- */
+.sideber {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    overflow: hidden;
+    width: 70px; /* 幅を調整 */
+    height: 100%;
+    transition: width 0.6s ease;
+    transform: translateZ(0) scale(1, 1);
+    background: #494949;
+}
+
+.sideber:hover {
+    overflow: visible;
+    width: 150px; /* ホバー時の幅を調整 */
+}
+
+.sideber ul {
+    margin: 7px 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.sideber li {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.sideber li label {
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: #ffffff;
+    padding: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.sideber li label:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.menu-icon {
+    width: 55px;
+    height: 55px;
+    border: 3px solid #06c286;
+    border-radius: 15px;
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-buttom {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    color: #FFFFFF;
+}
+
+.icon-img {
+    width: 50px;
+    height: 50px;
+    padding: 2px;
+    border-radius: 12px; /* アイコンの角を丸くする */
+}
+
+.icon-img-search{
+    width: 40px;
+    height: 40px;
+    padding: 2px;
+    margin: 10px;
+    margin-top: 12px;
+    border-radius: 12px;
+}
+
+.menu-text {
+    font-size: 18px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sideber li:hover .menu-text {
+    opacity: 1;
+}
+
+.sideber:hover .menu-text {
+    opacity: 1;
+    transition: opacity 0.3s ease, font-size 0.3s ease;
+}
+
+.list {
+    display: none;
+}
+
+.sideber li:hover .menu-text + .list {
+    display: block;
+}
+
+.list {
+    padding-top: 5px;
+    border-top: 1px solid #06c286;
+}
+
+.listname:hover{
+    background-color: #585858;
+}
+
+/*-----入力フォーム------*/
+.send {
+    display: flex;
+    border: 3px solid #06c286;
+    border-radius: 15px; /* 丸みを帯びた縁を設定 */
+    position: absolute; /* 絶対配置 */
+    bottom: 0; /* 下端に配置 */
+    width: 90%;
+    justify-content: space-between; /* 左右に均等にスペースを配置 */
+    align-items: center; /* 上下中央に配置 */
+}
+
+.text-box {
+    display: flex;
+    align-items: center;
+    width:100%; /* ボタンを除いた幅 */
+    background-color: transparent; /* 背景色を透明に */
+    padding: 5px; /* 内側に余白を追加 */
+}
+
+.chat-text {
+    flex-grow: 1;
+    height: 40px; /* 高さを固定 */
+    outline: none;
+    border: none; /* ボーダーを削除 */
+    background-color: transparent; /* 背景色を透明に */
+    color: #FFFFFF; /* テキストの色を白に */
+    padding-left: 10px; /* テキストのインデント */
+}
+
+.send-button, .send-file {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px; /* ボタンに余白を追加 */
+}
+
+.send-button img, .send-file img {
+    width: 20px;
+    height: 20px;
+}

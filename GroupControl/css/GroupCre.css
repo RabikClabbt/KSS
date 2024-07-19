@@ -1,0 +1,83 @@
+body {
+    background-color: #3b3b3b;
+}
+
+.group-container {
+    text-align: center;
+    margin: 50px auto;
+    width: 300px;
+    padding: 20px;
+}
+
+.group-title {
+    color: #06c286;
+    margin-bottom: 20px;
+}
+
+.group-name,
+.group-icon,
+.group-userId {
+    color: white;
+    margin-bottom: 20px;
+}
+
+.group-input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.group-icon {
+    position: relative;
+}
+
+.file-label {
+    cursor: pointer;
+    padding: 5px;
+    margin: 30px auto;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#groupIcon {
+    display: none;
+}
+
+.circle-icon {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ccc;
+    display: none;
+    margin: 20px auto;
+}
+
+.group-button{
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    width: 90px;
+    margin:20px auto;
+    padding: 5px;
+    border: 1px solid #06C286;
+    border-radius: 5px;
+    background-color: #06C286;
+    color: white;
+    font-size: 1em;
+}
+
+.error {
+    color: red;
+    font-size: 16px;
+}
+
+.success {
+    color: green;
+    font-size: 16px;
+
+}
