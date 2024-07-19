@@ -17,12 +17,14 @@ main {
 }
 
 .Sfunction .text{
-    background-color: #808080;
-    border-color: #808080;
-    border-radius: 0.4em;
+    border: 3px solid #06c286;
+    border-radius: 12px;
+    background-color: transparent;
+    color: #FFFFFF;
+    padding-left: 10px;
     margin-right: 10px;
-    width: 500px;
-    height:30px;
+    width: 50vw;
+    height: 40px;
 }
 
 .Sfunction button {
@@ -58,16 +60,90 @@ h2{
 .user {
     display: flex;
     align-items: center;
-    padding-bottom: 10px;
+    margin-bottom: 15px;
     padding-left: 30%;
 }
 
+.user a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+}
+
+.user a:hover {
+    text-decoration: underline;
+}
+
 .user .circle {
-    margin-right: 15px;
+    margin-right: 15px; /* circleとnicknameの間隔 */
+}
+.user .nickname {
+    font-size: 17px;
 }
 
 .question{
-    margin-bottom:10px;
-    background-color: #3B3B3B;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #444;
+    padding: 10px;
     border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.question .profile {
+    display: flex;
+    align-items: center; /* nicknameを水平方向に中央揃えにする */
+    margin-bottom: 15px; /* profileとtiteleの間隔 */
+    padding-bottom: 5px; /* アンダーラインの余白 */
+}
+
+.profile a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+}
+
+.profile a:hover {
+    text-decoration: underline;
+}
+
+.profile .circle {
+    margin-right: 15px; /* circleとnicknameの間隔 */
+}
+
+.profile .nickname {
+    font-size: 17px;
+}
+
+.questionLink {
+    text-decoration: none;
+    color: #fff;
+}
+
+.questionLink:visited {
+    color: #fff;
+}
+
+.questionLink:hover {
+    color: #06c286;
+    text-decoration: underline;
+}
+
+.questionTitle {
+    font-size: 17px; /* titeleのフォントサイズ */
+    font-weight: bold;
+    margin-bottom: 5px; /* titeleとquestion-textの間隔 */
+}
+
+.noResult {
+    display: flex;
+    justify-content: center;
+}
+
+.noSearch {
+    display: flex;
+    justify-content: center;
 }

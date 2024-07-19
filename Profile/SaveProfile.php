@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../db-connect.php';
+require '../src/db-connect.php';
 
 // $pdoを定義する
 $pdo = new PDO($connect, user, pass);

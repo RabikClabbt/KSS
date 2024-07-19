@@ -4,8 +4,7 @@ body{
 
 .in-container{
     text-align: center;
-    margin: 50px auto;
-    padding: 20px;
+    margin-top: 50px;
 }
 
 .in-title{
@@ -41,10 +40,7 @@ body{
 
 .in-input{
     width: 300px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+    padding: 5px;
 }
 
 .in-error{

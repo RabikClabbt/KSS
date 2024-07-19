@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../db-connect.php';
+require '../src/db-connect.php';
 require '../Header/Header.php';
 
 $user = $_SESSION['users'];
@@ -45,8 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>ユーザー情報変更結果</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="../image/SiteIcon.svg" type="image/svg">
+    <title><?= $user['name'] ?> (#<?= $user['id'] ?>) さんの情報更新 | Yadi-X</title>
     <link rel="stylesheet" href="../css/UserInfoEdit.css">
     <script>
         window.onload = function() {

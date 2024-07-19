@@ -11,14 +11,14 @@ try {
 }
 
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 15;
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 30;
 $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
 
 $sql = "SELECT q.userID, u.nickname, u.profileIcon, q.questionID, q.questionTitle, q.questionText
         FROM Question q
         JOIN Users u ON q.userID = u.userID
         WHERE q.questionTitle LIKE '%$keyword%' OR q.questionText LIKE '%$keyword%'
-        ORDER BY q.questionID ASC
+        ORDER BY q.questionID DESC
         LIMIT $limit OFFSET $offset";
 
 $stmt = $conn->prepare($sql);
@@ -37,7 +37,7 @@ if (!empty($results)) {
         <div class="question">
             <div class="profile">
                 <!-- 相手側のユーザーページへのリンク -->
-                <a href="#">
+                <a href="../Profile/OtherProfile.php?userID=<?= $userID ?>">
                     <div class="circle">
                         <?php if (!empty($profileIcon)) { ?>
                             <img src="<?= $profileIcon ?>" alt="profileIcon">
@@ -45,14 +45,15 @@ if (!empty($results)) {
                             <img src="../image/DefaultIcon.svg" alt="profileIcon">
                         <?php } ?>
                     </div>
+                    <div class="nickname"><?= htmlspecialchars($nickname) ?></div>
                 </a>
-                <div class="nickname"><?= htmlspecialchars($nickname) ?></div>
             </div>
             <a href="./Detail.php?questionID=<?= $questionID ?>" class="questionLink">
                 <div class="questionTitle"><?= htmlspecialchars($questionTitle) ?></div>
             </a>
-            <div class="questionText"><?= htmlspecialchars($questionText) ?></div>
-            <div class="actions"><button class="like">👍</button></div>
+            <div class="questionText" data-full-text="<?= htmlspecialchars($questionText) ?>">
+                <?= htmlspecialchars(mb_substr($questionText, 0, 30, 'UTF-8')) ?>
+            </div>
         </div>
         <?php
     }
@@ -64,3 +65,4 @@ if (!empty($results)) {
     </div>
     <?php
 }
+?>

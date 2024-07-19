@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../db-connect.php';
+require '../src/db-connect.php';
 require '../Header/Header.php';
 
 try {
@@ -11,12 +11,21 @@ try {
     exit;
 }
 
-if (!isset($_GET['userID'])) {
+if (!isset($_GET['userID']) || $_GET['userID'] == 'Anonymous' ) {
     echo "ユーザーIDが指定されていません。";
     exit;
 }
 
 $otherUserID = htmlspecialchars($_GET['userID']);
+
+// セッションIDとotherUserIDが一致する場合にProfile.phpにリダイレクト
+if (isset($_SESSION['users']['id']) && $_SESSION['users']['id'] == $otherUserID) {
+    echo '<script type="text/javascript">
+              window.location.href = "Profile.php";
+          </script>';
+    exit;
+}
+
 $sql = $pdo->prepare('SELECT * FROM Users WHERE userID = ?');
 $sql->execute([$otherUserID]);
 $user = $sql->fetch(PDO::FETCH_ASSOC);
@@ -67,10 +76,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['directMessage'])) {
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/OtherProfile.css" />
-    <title>プロフィール画面</title>
+    <link rel="stylesheet" href="./css/OtherProfile.css" type="text/css" />
+    <link rel="icon" href="../image/SiteIcon.svg" type="image/svg">
+    <title><?= htmlspecialchars($user['nickname']) ?>さんのプロフィール | Yadi-X</title>
     <script>
         function triggerFileInput() {
             document.getElementById('file-input').click();
@@ -147,11 +157,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['directMessage'])) {
                 <input type="hidden" name="partnerID" value="<?= htmlspecialchars($user['userID']) ?>">
                 <div class="input-wrapper">
                     <input type="text" id="commentText" name="commentText" placeholder="ダイレクトメッセージ">
-                    <button type="button" onclick="triggerFileInput()" class="upload-icon"><img src="../Image/FileIcon.png" alt="ファイルアップロード"></button>
-                    <button type="submit" name="directMessage" class="send-button"><img src="../Image/SendIcon.png" alt="送信"></button>
+                    <button type="button" onclick="triggerFileInput()" class="upload-icon"><img src="../image/FileIcon.svg" alt="ファイルアップロード"></button>
+                    <button type="submit" name="directMessage" class="send-button"><img src="../image/SendIcon.svg" alt="送信"></button>
                 </div>
                 <div>
-                    <img src="../Image/DeleteIcon.png" id="delete-button" alt="削除" onclick="removeFile()">
+                    <img src="../Image/DeleteIcon.svg" id="delete-button" alt="削除" onclick="removeFile()">
                     <img id="file-preview" alt="File Preview">
                     <span id="file-name"></span>
                 </div>
@@ -188,11 +198,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['directMessage'])) {
                 echo '<p>' . htmlspecialchars($comment['commentText']) . '</p>';
                 echo '</a>';
                 echo '<div class="rply">';
-                echo '<img src="../Image/RplyMark.png" alt="rply" height="20" width="20">';
+                echo '<img src="../image/RplyMark.svg" alt="rply" height="20" width="20">';
                 echo '<div class="balloon3-left">';
                 echo '<p>' . $rplyCount . '</p>';
                 echo '</div>';
-                echo '<img src="../Image/GoodSine.png" alt="good" height="20" width="20">';
                 echo '</div>';
                 echo '</div>';
             }

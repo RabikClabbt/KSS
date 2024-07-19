@@ -76,3 +76,20 @@ function sendComment(questionID) {
             });
     }
 }
+
+function bestAnswer(qID, aID, flg) {
+    const data = {
+        qID: qID,
+        aID: aID,
+        flg: flg === 1 ? 0 : 1
+    };
+    console.log(data);
+    axios.post('./BestAnswer.php', data)
+        .then(response => {
+            console.log(response.data);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('エラー:', error);
+        });
+}

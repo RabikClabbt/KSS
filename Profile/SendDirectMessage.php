@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../db-connect.php';
+require '../src/db-connect.php';
 
 if (!isset($_SESSION['users'])) {
     header('Location: Login.php');

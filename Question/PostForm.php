@@ -17,36 +17,96 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
     $category = $_POST['QuestionCategory'];
     $title = $_POST['QuestionTitle'];
     $content = $_POST['QuestionContent'];
-    $appendFile = $_POST['FileUpload'] ?? null;
+    $appendFile = NULL;
 
-    $bindValues = [$userId, $title, $content, $appendFile];
-    $placeholders = '(?, ?, ?, ?';
-    if ($category !== null) {
-        $bindValues[] = $category;
-        $placeholders .= ', ?';
+    // ファイルがアップロードされているかチェックする
+    if (isset($_FILES['FileUpload'])) {
+        $targetDir = "../Question/uploads/";
+        $uploadOk = 1;
+        $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+        // 許可されているファイル形式かどうかをチェック
+        $allowedTypes = ["jpg", "png", "jpeg", "gif", "pdf"];
+        if (!in_array($fileType, $allowedTypes)) {
+            $error = "許可されていないファイル形式です。";
+            $uploadOk = 0;
+        }
+    
+        // ファイル名に疑似乱数を使用し、0~9の値を最後尾に付与する。
+        // その後、文字列をハッシュ化し、初めの15文字を取得する。
+        $targetFile = $targetDir . basename(
+            substr(
+                sha1(basename($_FILES['FileUpload']['tmp_name']) . rand(0, 9)),
+                0,
+                15
+            )
+            . '.' . $fileType
+        );
+
+        error_log($targetFile);
+
+        // エラーがあればアップロードを中止
+        if ($uploadOk == 0) {
+            $error = "ファイルはアップロードされませんでした。";
+        } else {
+            if (move_uploaded_file($_FILES['FileUpload']['tmp_name'], $targetFile)) {
+                $appendFile = $targetFile; // アップロードされたファイルのパスを保存
+            } else {
+                $error = "ファイルのアップロードに失敗しました。";
+            }
+        }
+        
+        if (isset($error)) {
+            echo json_encode(['success' => false, 'error' => $error]);
+            exit;
+        }
     }
-    $placeholders .= ')';
-    $query = "INSERT INTO Question " . $placeholders . " VALUES (?, ?, ?, ?" . str_repeat(', ?', count($bindValues) - 4) . ")";
-    $stmt = $pdo->prepare($query);
-    if ($stmt->execute($bindValues)) {
-        // 成功時の処理
-        $query = "SELECT questionID FROM Question WHERE userID = ? AND questionTitle = ? AND questionText = ? ORDER BY id DESC LIMIT 1";
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([$userId, $title, $content]);
-        $question = $stmt->fetch();
-        $questionID = $question['questionID'];
-        header('Location: Detail.php?questionID=' . $questionID);
-        exit;
-    } else {
-        $error = "質問の投稿に失敗しました。";
+
+    try {
+        if (empty($category)) {
+            $query = "INSERT INTO Question (userID, questionTitle, questionText, appendFile) VALUES (?, ?, ?, ?)";
+            $stmt = $pdo->prepare($query);
+            if ($stmt->execute([$userId, $title, $content, $appendFile])) {
+                // 成功時の処理
+                $query = "SELECT questionID FROM Question WHERE userID = ? AND questionTitle = ? AND questionText = ? ORDER BY questionID DESC LIMIT 1";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute([$userId, $title, $content]);
+                $question = $stmt->fetch();
+                $questionID = $question['questionID'];
+                header('Location: Detail.php?questionID=' . $questionID);
+                exit;
+            } else {
+                $error = "質問の投稿に失敗しました。";
+            }
+        } else {
+            $query = "INSERT INTO Question (userID, category, questionTitle, questionText, appendFile) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $pdo->prepare($query);
+            if ($stmt->execute([$userId, $category, $title, $content, $appendFile])) {
+                // 成功時の処理
+                $query = "SELECT questionID FROM Question WHERE userID = ? AND questionTitle = ? AND questionText = ? ORDER BY questionID DESC LIMIT 1";
+                $stmt = $pdo->prepare($query);
+                $stmt->execute([$userId, $title, $content]);
+                $question = $stmt->fetch();
+                $questionID = $question['questionID'];
+                header('Location: Detail.php?questionID=' . $questionID);
+                exit;
+            } else {
+                $error = "質問の投稿に失敗しました。";
+            }
+        }
+    } catch (PDOException $e) {
+        error_log("エラー: " . $e->getMessage());
+        $error = "データベースエラーが発生しました。";
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="utf-8" />
-    <title>質問投稿</title>
+    <link rel="icon" href="../image/SiteIcon.svg" type="image/svg">
+    <title><?= $_SESSION['users']['name'] ?>さん 疑問や質問を投稿しよう！ | Yadi-X</title>
     <link rel="stylesheet" type="text/css" href="./css/PostForm.css">
 </head>
 <body>
@@ -125,6 +185,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                             <label for="FileUpload">ファイル・画像のアップロード</label>
                             <input type="file" id="FileUpload" name="FileUpload">
                         </div>
+                        <div id="imagePreview" style="display:none;">
+                            <img id="uploadedImage" src="" alt="アップロードされた画像" style="max-width: 300px;">
+                        </div>
                         
                         <div class="SubmitWrapper">
                             <button type="submit">投稿</button>
@@ -134,28 +197,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
             </form>
         </main>
         <side>
-                <div class="topic">
-                    <p>話題の質問</p>
-                    <div class="topicList">
+            <div class="topic">
+                <p>話題の質問</p>
+                <div class="topicList">
 
-                    </div>
                 </div>
-                <div class="recruiting">
-                    <p>回答募集中</p>
-                    <div class="recruitingList">
+            </div>
+            <div class="recruiting">
+                <p>回答募集中</p>
+                <div class="recruitingList">
 
-                    </div>
                 </div>
-                <div>
-                    <!-- 空のdiv -->
+            </div>
+            <div>
+                <div class="back">
+                    <button class="historyBack" onclick="history.back()">戻る</button>
                 </div>
+            </div>
         </side>
     </div>
     <footer>
         <!-- フッターの内容 -->
     </footer>
     <script>
-        var isLoggedIn = <?php echo json_encode($isLoggedIn); ?>;
+        let isLoggedIn = <?php echo json_encode($isLoggedIn); ?>;
     </script>
     <script src="./js/PostForm.js"></script>
 </body>

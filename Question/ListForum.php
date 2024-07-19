@@ -21,7 +21,8 @@ $totalCount = $conn->query("SELECT COUNT(*) FROM Question WHERE questionTitle LI
 <html lang="ja">
 <head>
     <meta charset="utf-8" />
-    <title>Yadi-X 質問フォーラム</title>
+    <link rel="icon" href="../image/SiteIcon.svg" type="image/svg">
+    <title>質問ホーム | Yadi-X</title>
     <link rel="stylesheet" type="text/css" href="./css/ListForum.css">
 </head>
 <body>

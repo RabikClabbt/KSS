@@ -1,231 +1,206 @@
 <?php
 session_start();
 ob_start(); // ここで出力バッファリングを開始する
-require 'db-connect.php';
+require '../src/db-connect.php';
+
+//データベース接続用
+$pdo=new PDO($connect,user,pass);
+
+//連絡する相手の確認
+$userID = $_SESSION['users']['id']; // 自身のユーザーID
+$partnerID = $_GET['partnerID']; // 相手側のユーザーID
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $chat = $_POST['chat'];
+    $postPartnerID = $_POST['partnerID'];
+    $uploadedFile = $_FILES['file'];
+
+    //送信相手の確認
+    $mstr='SELECT 1 FROM Users WHERE userID = ?';
+    $mkeyArray = array($postPartnerID);
+    $msql=$pdo->prepare($mstr);
+    $msql->execute($mkeyArray);
+
+    //対象の相手にチャット内容を送信する
+    if ($msql) {
+        // コメントもファイルも空でないかチェック
+        if (!empty($chat) || (!empty($uploadedFile['name']) && $uploadedFile['error'] === UPLOAD_ERR_OK)) {
+            if ($uploadedFile['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = './uploads/';
+                $uploadFilePath = $uploadDir . basename($uploadedFile['name']);
+
+                if (move_uploaded_file($uploadedFile['tmp_name'], $uploadFilePath)) {
+                    // ファイルアップロード成功
+                    $filePath = $uploadFilePath;
+                } else {
+                    // ファイルアップロード失敗
+                    $filePath = NULL;
+                }
+            } else {
+                // ファイルがアップロードされなかった場合
+                $filePath = NULL;
+            }
+
+            // チャットの保存
+            $icstr = 'INSERT INTO DirectMessage (userID, partnerID, commentText, appendFile) VALUES (?, ?, ?, ?)';
+            $insert = $pdo->prepare($icstr);
+            $Array[0] = $userID;
+            $Array[1] = $postPartnerID;
+            $Array[2] = $chat;
+            $Array[3] = $filePath;
+            $insert->execute($Array);
+
+            header("Location: ./PersonalChat.php?partnerID=$postPartnerID");
+            exit();
+        } else {
+            // エラーメッセージを表示するなどの処理
+            error_log('コメントかファイルのどちらかを入力してください');
+        }
+    } else {
+        error_log('送信する相手が見つかりませんでした');
+    }
+} else {
+    error_log('transmission error: Post data not found');
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/chat.css">
-    <title>個人チャット画面</title>
-    <script>
-        function triggerFileInput() {
-            document.getElementById('file-input').click();
-        }
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="./css/Chat.css">
+        <link rel="icon" href="../image/SiteIcon.svg" type="image/svg">
+        <title><?= $partnerID ?> | Yadi-X</title>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="js/Ajax.js"></script>
+        <script>
+            var globalUserID = <?php echo json_encode($_SESSION['users']['id']); ?>;
+            var globalPartnerID = <?php echo json_encode($_GET['partnerID']); ?>;
 
-        function displayFileName(input) {
-            const file = input.files[0];
-            const filePreview = document.getElementById('file-preview');
-            const fileName = document.getElementById('file-name');
-            const deleteButton = document.getElementById('delete-button');
-            const textInput = document.querySelector('.text'); // テキストボックスを取得
+            // ファイルの添付・削除
+            function triggerFileInput() {
+                document.getElementById('file-input').click();
+            }
 
-            if (file) {
-                fileName.textContent = file.name;
-                deleteButton.style.display = 'block';
-                textInput.style.width = 'calc(100% - 260px)'; // テキストボックスの幅を調整
+            function displayFileName(input) {
+                const file = input.files[0];
+                const filePreviewContainer = document.getElementById('file-preview-container');
+                const filePreview = document.getElementById('file-preview');
+                const fileName = document.getElementById('file-name');
+                const deleteButton = document.getElementById('delete-button');
 
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        filePreview.src = e.target.result;
-                        filePreview.style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
+                if (file) {
+                    filePreviewContainer.style.display = 'flex'; // ファイルが選択されたときに表示
+                    fileName.textContent = file.name;
+                    deleteButton.style.display = 'block';
+
+                    if (file.type.startsWith('../PersonalChat/uploads/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            filePreview.src = e.target.result;
+                            filePreview.style.display = 'block';
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        filePreview.style.display = 'none';
+                        filePreview.src = '';
+                    }
                 } else {
-                    filePreview.style.display = 'none';
-                    filePreview.src = '';
+                    removeFile(); // ファイルが選択されなかった場合に削除
                 }
-            } else {
+            }
+
+            function removeFile() {
+                const fileInput = document.getElementById('file-input');
+                const filePreviewContainer = document.getElementById('file-preview-container');
+                const filePreview = document.getElementById('file-preview');
+                const fileName = document.getElementById('file-name');
+                const deleteButton = document.getElementById('delete-button');
+
+                fileInput.value = '';
+                filePreviewContainer.style.display = 'none'; // ファイルがないときは非表示
                 filePreview.style.display = 'none';
                 filePreview.src = '';
                 fileName.textContent = '';
                 deleteButton.style.display = 'none';
-                textInput.style.width = 'calc(100% - 200px)'; // テキストボックスの幅を元に戻す
             }
-        }
-
-        function removeFile() {
-            const fileInput = document.getElementById('file-input');
-            const filePreview = document.getElementById('file-preview');
-            const fileName = document.getElementById('file-name');
-            const deleteButton = document.getElementById('delete-button');
-            const textInput = document.querySelector('.text'); // テキストボックスを取得
-
-            fileInput.value = '';
-            filePreview.style.display = 'none';
-            filePreview.src = '';
-            fileName.textContent = '';
-            deleteButton.style.display = 'none';
-            textInput.style.width = 'calc(100% - 200px)'; // テキストボックスの幅を元に戻す
-        } 
-    </script>
-</head>
-<body>
-    <header>
-        <?php require 'Header.php'; ?>
-    </header>
+        </script>
+    </head>
+    <body>
+        <header>
+            <?php require '../Header/Header.php'; ?>
+        </header>
         <div class="chat-all">
-            <div class="chat-history">
-            <?php
-                //コメントID記録用
-                $count = 0;
-
-                //データベース接続用
-                $pdo=new PDO($connect,USER,PASS);
-                $mstr='select * from Users inner join DirectMessage on Users.userID=DirectMessage.userID where ';
-
-                //連絡する相手の確認
-                $userID = 'user'; // 自身のユーザーID
-                $partnerID = 'user2'; // 相手側のユーザーID($_GETで受け取る)
-
-                //送信相手の確認
-                $mstr = $mstr.'partnerID = ?';
-                $mkeyArray = array($partnerID);
-                $msql=$pdo->prepare($mstr);
-                $msql->execute($mkeyArray);
-
-                // 自身と相手のメッセージを時系列で取得
-                $sql = 'select * from DirectMessage where (userID = ? AND partnerID = ?) or (userID = ? AND partnerID = ?) order by commentID ASC';
-                $keyArray = array($userID, $partnerID, $partnerID, $userID);
-                $history = $pdo->prepare($sql);
-                $history->execute($keyArray);
-
-                //チャット履歴を表示(commentIDの昇順)
-                if ($history->rowCount()>=1) {
-                    foreach ($history as $row) {
-                        if($userID==$row['userID']){
-                            echo '<div class="my">';
-                            echo $row['userID'];
-                            echo '<img src="./image/DefaultIcon.svg" alt="profileIcon" width="20" height="20">';
-                            echo '<br>';
-                            //ファイルがあれば表示する
-                            if($row['appendFile']!='NULL'){
-                            echo $row['appendFile'];
-                            echo '<br>';
-                            }
-                            echo $row['commentText'];
-                            echo '</div>';
-                            echo '<br>';
-                        } else {
-                            echo '<div class="partner">';
-                            echo '<img src="./image/DefaultIcon.svg" alt="profileIcon" width="20" height="20">';
-                            echo $row['userID'];
-                            echo '<br>';
-                            //ファイルがあれば表示する
-                            if($row['appendFile']!='NULL'){
-                            echo $row['appendFile'];
-                            echo '<br>';
-                            }
-                            echo $row['commentText'];
-                            echo '</div>';
-                            echo '<br>';
-                        }
-                            echo '<br>';
-                            $count = $row['commentID'];
-                    }
-                } else {
-                    echo 'チャット履歴がありません。';
-                }
-
-                    //登録するcommentIDの値を格納
-                    $count += 1;
-
-                //対象の相手にチャット内容を送信する
-                if($msql->rowCount()>=1 && isset($_POST['chat'])){
-                    echo $userID;
-                    echo '<br>';
-                    echo $_POST['chat'];
-                    echo '<br>';
-                    echo '<br>';
-                    
-                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                        if (isset($_POST['chat'])) {
-                            $chat = $_POST['chat'];
-                            $uploadedFile = $_FILES['file'];
-                    
-                            if ($uploadedFile['error'] === UPLOAD_ERR_OK) {
-                                $uploadDir = 'uploads/';
-                                $uploadFilePath = $uploadDir . basename($uploadedFile['name']);
-                    
-                                if (move_uploaded_file($uploadedFile['tmp_name'], $uploadFilePath)) {
-                                    // ファイルアップロード成功
-                                    $filePath = $uploadFilePath;
-                                } else {
-                                    // ファイルアップロード失敗
-                                    $filePath = 'default';
-                                }
-                            } else {
-                                // ファイルがアップロードされなかった場合
-                                $filePath = 'NULL';
-                            }
-                    //チャットの保存
-                    $icstr = 'insert into DirectMessage values (?,?,?,?,?)';
-                    $insert = $pdo->prepare($icstr);
-                    $Array[0] = $userID;
-                    $Array[1] = $partnerID;
-                    $Array[2] = $count;
-                    $Array[3] = $_POST['chat'];
-                    $Array[4] = $filePath;
-                    $insert->execute($Array);
-                    $count += 1;
-
-                    header("Location: PersonalChat.php");
-                    exit();
-                        }
-                    }
-                }
-                //相手が見つからない場合
-                else if($msql->rowCount()==0){
-                        echo '送信する相手が見つかりませんでした。';
-                }
-            ?>
-            <form action="PersonalChat.php" method="post" enctype="multipart/form-data">
-                <div class="Cfunction">
-                    <input type="textarea" name="chat" value="" class="text" required>
-                    <button type="button" onclick="triggerFileInput()" class="upload-icon">
-                        <img src="./image/file-icon.png">
-                    </button>
-                    <input type="file" id="file-input" name="file" style="display: none;" onchange="displayFileName(this)">
-                    <div id="file-preview-container">
-                        <img id="file-preview" style="display: none;" />
-                        <span id="file-name"></span>
-                        <img src="./image/delete-box.png" id="delete-button" onclick="removeFile()" alt="削除">
-                    </div>
-                    <button type="submit" class="button">
-                        <img src="./image/send-icon.svg" alt="送信">
-                    </button>
+            <div class="chat-content">
+                <div class="chat-history" id="chatHistoryContainer"></div>
+                <div class="chat-form">
+                    <form action="./PersonalChat.php?partnerID=<?= $_GET['partnerID'] ?>" method="post" enctype="multipart/form-data">
+                        <div id="file-preview-container">
+                            <img src="../image/Dustbin.svg" id="delete-button" onclick="removeFile()" alt="削除">
+                            <img id="file-preview" style="display: none;" />
+                            <span id="file-name"></span>
+                        </div>
+                        <div class="Cfunction">
+                            <input type="textarea" name="chat" value="" class="text" cols="25" rows="5" wrap="hard">
+                            <div class="Cfunctionbtn">
+                                <button type="button" onclick="triggerFileInput()" class="upload-icon">
+                                    <img src="../image/FileIcon.svg">
+                                </button>
+                                <input type="file" id="file-input" name="file" style="display: none;" onchange="displayFileName(this)">
+                                <input type="hidden" name="partnerID" value="<?= $_GET['partnerID'] ?>">
+                                <button type="submit" class="button">
+                                    <img src="../image/SendIcon.svg" alt="送信">
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
             </div>
             <div class="space">
                 <h2>知り合い</h2>
-            <?php
-            //自身のユーザーIDがpartnerIDとして登録されているものを探す(SQL)
-                $pstr='select * from Users inner join DirectMessage on Users.userID=DirectMessage.userID where ';
-                $pstr = $pstr.'partnerID = ?';
-                $pkeyArray = array($userID);
-                $psql=$pdo->prepare($pstr);
-                $psql->execute($pkeyArray);
-            //結果を表示する
-            if($psql->rowCount()>0){
-                foreach ($psql as $row) {
-                    echo '<div class="friend">';
-                    echo '<img src="./image/DefaultIcon.svg" alt="profileIcon" width="20" height="20">';
-                    echo $row['userID'];
-                    echo '</div>';
-                }
-            }
-            else{
-                echo '<div class="friend">';
-                echo '見つかりませんでした。';
-                echo '</div>';
-            }
-            ?>
+                <div class="space-list">
+                    <?php
+                    // 自身のユーザーIDがpartnerIDまたはuserIDとして登録されているものを探す(SQL)
+                    $pstr = 'SELECT DISTINCT CASE WHEN dm.userID = :userID THEN dm.partnerID ELSE dm.userID END AS friendID, u.nickname, u.profileIcon 
+                    FROM DirectMessage dm JOIN Users u ON (CASE WHEN dm.userID = :userID THEN dm.partnerID ELSE dm.userID END) = u.userID 
+                    WHERE dm.userID = :userID OR dm.partnerID = :userID';
+                    $pkeyArray = array('userID' => $userID);
+                    $psql = $pdo->prepare($pstr);
+                    $psql->execute($pkeyArray);
+
+                    // 結果を表示する
+                    $friendCount = 0;
+                    if ($psql->rowCount() > 0) {
+                        foreach ($psql as $row) { 
+                            if ($row['friendID'] <> $partnerID) { ?>
+                            <div class="profile">
+                                <a href="./PersonalChat.php?partnerID=<?= $row['friendID'] ?>">
+                                    <div class="circle">
+                                        <?php if (!empty($row['profileIcon'])) { ?>
+                                            <img src="<?= $row['profileIcon'] ?>" alt="profileIcon">
+                                        <?php } else { ?>
+                                            <img src="../image/DefaultIcon.svg" alt="profileIcon">
+                                        <?php } ?>
+                                    </div>
+                                    <div class="nickname"><?= htmlspecialchars($row['nickname']) ?></div>
+                                </a>
+                            </div>
+                            <?php $friendCount++; }
+                        }
+                    } else { ?>
+                        <div class="nofriend">
+                            知り合いを増やそう！
+                        </div>
+                    <?php } 
+                    if ($friendCount === 0) { ?>
+                        <div class="nofriend">
+                            知り合いを増やそう！
+                        </div>
+                    <?php } ?>
+                </div>
             </div>
         </div>
-</body>
+    </body>
 </html>
 
 <?php

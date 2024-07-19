@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../db-connect.php';
+require '../src/db-connect.php';
 $pdo = new PDO($connect, user, pass);
 if (isset($_SESSION['users'])) {
     $userID = $_SESSION['users']['id'];
@@ -58,7 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/Globalrply.css" />
-    <title>グローバルチャット詳細</title>
+    <link rel="icon" href="../image/SiteIcon.svg" type="image/svg">
+    <title><?= $comment['nickname'] ?>さんの投稿:<?= $comment['commentText'] ?> | Yadi-X</title>
 </head>
 <body>
     <div class="headerr">
@@ -75,23 +76,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="account">
                         <div class="account-image"><?php
                             if (!empty($comment['profileIcon'])){ ?>
-                                <a href="../Profile/Profile.php"><img src="<?= htmlspecialchars($comment['profileIcon']) ?>" alt="ProfileImage"></a><?php
+                                <a href="../Profile/Profile.php"><img src="<?= htmlspecialchars($comment['profileIcon']) ?>" alt="ProfileImage" class="image"></a><?php
                             }else{ ?>
-                                <a href="../Profile/Profile.php"><img src="../image/DefaultIcon.png" alt="ProfileImage"></a><?php
+                                <a href="../Profile/Profile.php"><img src="../image/DefaultIcon.svg" alt="ProfileImage" class="image"></a><?php
                             } ?>
                         </div>
                         <a href="../Profile/Profile.php?id=<?= htmlspecialchars($comment['userID']) ?>"><p class="account-name"><?= htmlspecialchars($comment['nickname']) ?></p></a>
                     </div>
-                    <p class="comment"><?= htmlspecialchars($comment['commentText']) ?></p><?php
-                    if($comment['appendFile']){?>
-                        <img src="<?= $comment['appendFile'] ?>" alt="画像を読み込めません"><?php
-                    }?>
+                    <p class="comment"><?= htmlspecialchars($comment['commentText']) ?></p>
+                    <div class="chat-comment-img">
+                        <?php if($comment['appendFile']) { ?>
+                            <img src="<?= $comment['appendFile'] ?>" alt="画像を読み込めません">
+                        <?php } ?>
+                    </div>
                     <div class="rply">
-                        <img src="../image/RplyMark.png" alt="rply" height="20" width="20">
+                        <img src="../image/RplyMark.svg" alt="rply" height="20" width="20">
                         <div class="balloon3-left">
                             <p><?= $rplyCount ?></p>
                         </div>
-                        <img src="../image/GoodSine.png" alt="good" height="20" width="20">
                     </div>
                 </div>
                 <!-- リプライ表示 -->
@@ -101,22 +103,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="rplyaccount">
                                 <div class="rplyaccount-image">
                                     <?php if (!empty($rply['profileIcon'])): ?>
-                                        <a href="../Profile/Profile.php"><img src="<?= htmlspecialchars($rply['profileIcon']) ?>" alt="ProfileImage"></a>
+                                        <a href="../Profile/Profile.php"><img src="<?= htmlspecialchars($rply['profileIcon']) ?>" alt="ProfileImage" class="image"></a>
                                     <?php else: ?>
-                                        <img src="../image/DefaultIcon.png" alt="ProfileImage">
+                                        <img src="../image/DefaultIcon.svg" alt="ProfileImage" class="image">
                                     <?php endif; ?>
                                 </div>
                                 <a href="../Profile/Profile.php?id=<?= htmlspecialchars($rply['userID']) ?>"><p class="account-name"><?= htmlspecialchars($rply['nickname']) ?></p></a>
                             </div>
-                            <a href="Globalrply.php?commentID=<?= $rply['commentID'] ?>" class="linkrply atag">
+                            <a href="Globalrply.php?commentID=<?= $rply['commentID'] ?>" class="linkrply-atag">
                                 <p class="comment"><?= htmlspecialchars($rply['commentText']) ?></p><?php
                                 if($rply['appendFile']){?>
                                     <img src="<?= $rply['appendFile'] ?>" alt="画像を読み込めません"><?php
                                 }?>
                             </a>
-                            <div class="rply">
-                                <img src="../image/GoodSine.png" alt="good" height="20" width="20">
-                            </div>
                         </div><?php
                     } ?>
                 </div>
@@ -128,11 +127,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="hidden" name="commentID" value="<?= $commentID ?>">
                     <input type="text" class="chat-text" placeholder="テキストを入力" name="commentText" value="<?= htmlspecialchars($commentText) ?>" spellcheck="false">
                     <label for="file-upload" class="send-file">
-                        <img src="../image/FileIcon.png" width="20" height="20" alt="ファイル添付">
+                        <img src="../image/FileIcon.svg" width="20" height="20" alt="ファイル添付">
                     </label>
                     <input type="file" id="file-upload" name="file" style="display: none;" onchange="displayFileName(this)">
                     <button type="submit" class="send-button">
-                        <img src="../image/SendIcon.png" width="20" height="20" alt="送信">
+                        <img src="../image/SendIcon.svg" width="20" height="20" alt="送信">
                     </button>
                 </form>
             </div><?php

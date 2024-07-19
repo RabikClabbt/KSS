@@ -9,6 +9,8 @@ try {
     exit;
 }
 
+$isLoggedIn = isset($_SESSION['users']);
+
 if (isset($_GET['questionID'])) {
     $questionID = $_GET['questionID'];
     $sqlq = "SELECT q.userID, u.nickname, u.profileIcon, q.questionTitle, q.questionText, q.appendFile
@@ -28,7 +30,8 @@ if (isset($_GET['questionID'])) {
 <html lang="ja">
 <head>
     <meta charset="utf-8" />
-    <title><?= htmlspecialchars($question['questionTitle']) ?></title>
+    <link rel="icon" href="../image/SiteIcon.svg" type="image/svg">
+    <title><?= htmlspecialchars($question['questionTitle']) ?> | Yadi-X</title>
     <link rel="stylesheet" type="text/css" href="./css/Detail.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./js/Detail.js"></script>
@@ -74,7 +77,7 @@ if (isset($_GET['questionID'])) {
                 <div class="questionDetail">
                     <div class="profile">
                         <!-- 相手側のユーザーページへのリンク -->
-                        <a href="#">
+                        <a href="../Profile/OtherProfile.php?userID=<?= $question['userID'] ?>">
                             <div class="circle">
                                 <?php if (!empty($question['profileIcon'])) { ?>
                                     <img src="<?= $question['profileIcon'] ?>" alt="profileIcon">
@@ -82,8 +85,8 @@ if (isset($_GET['questionID'])) {
                                     <img src="../image/DefaultIcon.svg" alt="profileIcon">
                                 <?php } ?>
                             </div>
+                            <div class="nickname"><?= htmlspecialchars($question['nickname']) ?></div>
                         </a>
-                        <div class="nickname"><?= htmlspecialchars($question['nickname']) ?></div>
                     </div>
                     <div class="questionText"><?= htmlspecialchars($question['questionText']) ?></div>
                     <?php if (!empty($question['appendFile'])) { ?>
@@ -116,7 +119,7 @@ if (isset($_GET['questionID'])) {
                                 <?php } ?>
                             </div>
                             <div class="profile" >
-                                <a href="#">
+                                <a href="../Profile/OtherProfile.php?userID=<?= $answer['userID'] ?>">
                                     <div class="circle">
                                         <?php if (!empty($answer['profileIcon'])) { ?>
                                             <img src="<?= $answer['profileIcon'] ?>" alt="profileIcon">
@@ -124,8 +127,8 @@ if (isset($_GET['questionID'])) {
                                             <img src="../image/DefaultIcon.svg" alt="profileIcon">
                                         <?php } ?>
                                     </div>
+                                    <div class="nickname"><?= htmlspecialchars($answer['nickname']) ?></div>
                                 </a>
-                                <div class="nickname"><?= htmlspecialchars($answer['nickname']) ?></div>
                             </div>
                             <div class="questionText"><?= htmlspecialchars($answer['answerText']) ?></div>
                             <?php if (!empty($answer['appendFile'])) { ?>
@@ -138,10 +141,12 @@ if (isset($_GET['questionID'])) {
                                 <button type="button" onclick="focusCommentInput('a', '<?php echo $answer['answerID']; ?>')">
                                     <img src="../image/ReplyArrow.svg" alt="reply">
                                 </button>
-                                <?php if(!empty($_SESSION) && $question['userID'] == $_SESSION['users']['id'] && $answer['bestFlg'] == 0) { ?>
-                                <button type="button" onclick="bestAnswer(<?= $questionID ?>, <?= $answerID ?>)" aria-label="ベストアンサーに選ぶ">
-                                    <img src="../image/BestFlg.svg" alt="best">
-                                </button>
+                                <?php if(!empty($_SESSION) && $question['userID'] == $_SESSION['users']['id']) { 
+                                    $bestFlg = $answer['bestFlg'];
+                                    ?>
+                                    <button type="button" onclick="bestAnswer(<?= $questionID ?>, <?= $answer['answerID'] ?>, <?= $bestFlg ?>)" aria-label="ベストアンサー">
+                                        <img src="../image/BestFlg.svg" alt="best">
+                                    </button>
                                 <?php } ?>
                             </div>
                         </div>
@@ -159,7 +164,7 @@ if (isset($_GET['questionID'])) {
                             <?php foreach ($replies as $reply) { ?>
                                 <div class="replyComment">
                                     <div class="profile">
-                                        <a href="#">
+                                        <a href="../Profile/OtherProfile.php?userID=<?= $reply['userID'] ?>">
                                             <div class="circle">
                                                 <?php if (!empty($reply['profileIcon'])) { ?>
                                                     <img src="<?= $reply['profileIcon'] ?>" alt="profileIcon">
@@ -167,8 +172,8 @@ if (isset($_GET['questionID'])) {
                                                     <img src="../image/DefaultIcon.svg" alt="profileIcon">
                                                 <?php } ?>
                                             </div>
+                                            <div class="nickname"><?= htmlspecialchars($reply['nickname']) ?></div>
                                         </a>
-                                        <div class="nickname"><?= htmlspecialchars($reply['nickname']) ?></div>
                                     </div>
                                     <div class="questionText"><?= htmlspecialchars($reply['replyText']) ?></div>
                                     <?php if (!empty($reply['appendFile'])) { ?>
@@ -197,7 +202,7 @@ if (isset($_GET['questionID'])) {
                                     foreach ($creplies as $creply) { ?>
                                         <div class="creplyComment">
                                             <div class="profile">
-                                                <a href="#">
+                                                <a href="../Profile/OtherProfile.php?userID=<?= $creply['userID'] ?>">
                                                     <div class="circle">
                                                         <?php if (!empty($creply['profileIcon'])) { ?>
                                                             <img src="<?= $creply['profileIcon'] ?>" alt="profileIcon">
@@ -205,8 +210,8 @@ if (isset($_GET['questionID'])) {
                                                             <img src="../image/DefaultIcon.svg" alt="profileIcon">
                                                         <?php } ?>
                                                     </div>
+                                                    <div class="nickname"><?= htmlspecialchars($reply['nickname']) ?></div>
                                                 </a>
-                                                <div class="nickname"><?= htmlspecialchars($creply['nickname']) ?></div>
                                             </div>
                                             <div class="questionText"><?= htmlspecialchars($creply['replyText']) ?></div>
                                             <?php if (!empty($creply['appendFile'])) { ?>
@@ -235,11 +240,10 @@ if (isset($_GET['questionID'])) {
                         placeholder="<?php if(isset($_SESSION['users'])){ echo '質問へのコメントを送信する'; } else { echo 'ログインしてください'; } ?>" 
                         id="commentInput" name="comment" spellcheck="false" data-ms-editor="true"></textarea>
                         <div class="sendCommentButton">
+                            <label for="appendFileButton"><img src="../image/FileIcon.svg" alt="appendFile"></label>
+                            <input type="file" id="appendFileButton" class="appendFileButton">
                             <button id="sendCommentButton" onclick="sendComment('<?php echo $questionID; ?>')">
                                 <img src="../image/SendIcon.svg" alt="send">
-                            </button>
-                            <button id="appendFileButton" onclick="sendFile()">
-                                <img src="../image/FileIcon.svg" alt="appendFile">
                             </button>
                         </div>
                     </form>

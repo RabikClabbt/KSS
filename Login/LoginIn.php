@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ログイン画面</title>
+    <link rel="icon" href="../image/SiteIcon.svg" type="image/svg">
+    <title>ログイン | Yadi-X</title>
     <link rel="stylesheet" type="text/css" href="css/Login.css">
 </head>
 
@@ -25,7 +26,7 @@
             <input class="in-input" type="password" placeholder="password" name="pass">
         </p>
     
-        <p><a class="in-link" href="TorokuInput.php">アカウント新規作成</a></p>
+        <p><a class="in-link" href="../Registration/Registration.php">アカウント新規作成</a></p>
 
         <p><button class="in-button" type="submit">ログイン</button></p>
         </form>

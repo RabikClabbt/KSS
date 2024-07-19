@@ -22,7 +22,7 @@
 .LoginButton {
     display: inline-block;
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #06c286;
     color: white;
     text-decoration: none;
     border-radius: 5px;
@@ -49,8 +49,9 @@ main {
 }
 
 .QuestionContents {
-    padding: 70px;
+    padding: 5vh;
     width: 100vh;
+    height: 100%;
     color: #fff;
 }
 
@@ -78,13 +79,71 @@ main {
     width: 100%;
     padding: 5px;
     margin-top: 5px;
+    border-radius: 5px;
+}
+
+/* Wrapper for the title section */
+.TitleWrapper {
+    width: 100%;
+}
+
+.TitleWrapper input[type="text"] {
+    height: 40px;
+    font-size: 12pt;
+}
+
+.QuestionTitle {
+    width: 100%;
+}
+
+/* Wrapper for the category section */
+.CategoryWrapper {
+    width: 100%;
+}
+
+.QuestionCategory {
+    width: 100%;
+}
+
+/* Wrapper for the content section */
+.ContentWrapper {
+    width: 100%;
+}
+
+.ContentWrapper textarea {
+    height: 35vh;
+    resize: none;
+    font-size: 10.5pt;
+    font-family: none;
+    line-height: 1.5;
+}
+
+.QuestionContent textarea::-webkit-scrollbar {
+    display: none;
+}
+
+/* Wrapper for the file upload section */
+.FileUploadWrapper {
+    width: 100%;
+}
+
+.FileUpload {
+    width: 100%;
+}
+
+/* Wrapper for the submit button */
+.SubmitWrapper {
+    width: 100%;
 }
 
 .SubmitWrapper button {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #06c286;
+    font-weight: bold;
+    font-size: 11pt;
     color: white;
+    border-radius: 5px;
     border: none;
     cursor: pointer;
 }
@@ -124,4 +183,27 @@ side {
 .postQuestionContainer {
     display: flex;
     justify-content: center;
+}
+
+.back {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.historyBack {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: #313131;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+    text-align: center; /* テキストを中央揃えにする */
 }

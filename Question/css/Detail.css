@@ -129,6 +129,17 @@ main {
     margin-bottom: 15px; /* profileとtiteleの間隔 */
 }
 
+.profile a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+}
+
+.profile a:hover {
+    text-decoration: underline;
+}
+
 .profile .circle {
     margin-right: 15px; /* circleとnicknameの間隔 */
 }
@@ -140,6 +151,7 @@ main {
 .questionText {
     line-height: 1.6;
     margin-right: auto; /* テキストの右端を画面幅に対して均等に配置 */
+    width: 90%;
 }
 
 .appendFile {
@@ -186,7 +198,6 @@ main {
     max-height: 110px;
     margin-right: auto;
     margin-left: auto;
-    margin-top: 10px;
     margin-bottom: 10px;
     border: 3px solid #06c286;
     border-radius: 15px;
@@ -247,6 +258,10 @@ main {
     gap: 10px; /* buttonとbuttonの間を開ける */
 }
 
+.sendCommentButton .appendFileButton {
+    display: none;
+}
+
 .sendCommentButton button {
     background: none;
     border: none;
@@ -264,7 +279,6 @@ main {
     width: 30px;
     height: 30px;
 }
-
 
 side {
     flex: 0 0 20%;

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../db-connect.php';
+require '../src/db-connect.php';
 require '../Header/Header.php';
 
 if (!isset($_SESSION['users'])) {
@@ -18,9 +18,10 @@ $pdo = new PDO($connect, user, pass);
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>プロフィール画面</title>
-    <link rel="stylesheet" href="../css/Profile.css">
+    <meta charset="utf-8" />
+    <link rel="icon" href="../image/SendIcon.svg" type="image/svg+xml">
+    <title><?= $user['name'] ?> (#<?= $user['id'] ?>) さん | Yadi-X</title>
+    <link rel="stylesheet" type="text/css" href="./css/Profile.css">
 </head>
 <body>
     <div class="profile-container">
@@ -65,11 +66,10 @@ $pdo = new PDO($connect, user, pass);
                 echo '<p>' . htmlspecialchars($comment['commentText']) . '</p>';
                 echo '</a>';
                 echo '<div class="rply">';
-                echo '<img src="../Image/RplyMark.png" alt="rply" height="20" width="20">';
+                echo '<img src="../image/RplyMark.svg" alt="rply" height="20" width="20">';
                 echo '<div class="balloon3-left">';
                 echo '<p>' . $rplyCount . '</p>';
                 echo '</div>';
-                echo '<img src="../Image/GoodSine.png" alt="good" height="20" width="20">';
                 echo '</div>';
                 echo '</div>';
             }

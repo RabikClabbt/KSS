@@ -62,7 +62,24 @@ main {
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    margin-right: 150px; /* ボタンと検索フォームの間のスペース */
+}
+
+@media (max-width: 768px) { /* スマートフォンなど小さい画面サイズ */
+    .post-question {
+        margin-right: 10px;
+    }
+}
+
+@media (min-width: 769px) { /* タブレットなど中くらいの画面サイズ */
+    .post-question {
+        margin-right: 50px;
+    }
+}
+
+@media (min-width: 1025px) { /* デスクトップなど大きな画面サイズ */
+    .post-question {
+        margin-right: 100px;
+    }
 }
 
 .post-search {
@@ -72,7 +89,7 @@ main {
 }
 
 .post-search-input {
-    width: 500px;
+    width: 400px;
     height: 50px; /* 高さを固定 */
     justify-content: center;
     align-items: center;
@@ -129,9 +146,21 @@ main {
     padding-bottom: 5px; /* アンダーラインの余白 */
 }
 
+.profile a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+}
+
+.profile a:hover {
+    text-decoration: underline;
+}
+
 .profile .circle {
     margin-right: 15px; /* circleとnicknameの間隔 */
 }
+
 .profile .nickname {
     font-size: 17px;
 }
@@ -158,6 +187,13 @@ main {
 
 .questionText {
     margin-left: 60px; /* profileの幅＋マージン */
+    overflow: hidden;
+    height: 1.5em; /* 1行分の高さ */
+}
+
+.questionText::after {
+    content: '';
+    position: absolute;
 }
 
 .actions {

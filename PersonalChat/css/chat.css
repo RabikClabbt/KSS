@@ -1,60 +1,179 @@
-#file-preview-container {
+body {
+    background-color: #2c2c2c;
+}
+
+.chat-all {
+    display: flex;
+    height: calc(100vh - 70px);
+}
+
+.chat-content {
+    flex: 7; /* 全体の70%を使用 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* チャット履歴 */
+.chat-history {
+    flex: 1; /* 残りのスペースをすべて使用 */
+    display: flex;
+    padding: 0 10px;
+    flex-direction: column; 
+    overflow-y: auto; /* 垂直方向のスクロールバーを有効 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.chat-history::-webkit-scrollbar {
+    display: none;
+}
+
+.chat-history p{
+    color:white;
+}
+
+.my {
+    color: white;
+    text-align: right;
+    margin: 10px 0 10px 55%; /* 左側のマージンを20%に設定 */
+    padding: 10px;
+    background-color: #3B3B3B;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* 全ての子要素を右寄せにする */
+}
+
+
+.partner {
+    color: white;
+    text-align: left;
+    margin: 10px 55% 10px 0;
+    padding: 10px;
+    background-color: #3B3B3B;
+    border-radius: 10px;
+}
+
+.user {
+    display: flex;
+    align-items: center; /* nicknameを水平方向に中央揃えにする */
+    margin-bottom: 10px;
+}
+
+.user a {
     display: flex;
     align-items: center;
-    margin-left: 10px; /* テキストボックスとの間にスペースを追加 */
+    text-decoration: none;
+    color: #fff;
+}
+
+.user a:hover {
+    text-decoration: underline;
+}
+
+.partner .user .circle {
+    margin-right: 15px; /* circleとnicknameの間隔 */
+}
+
+.user .nickname {
+    font-size: 17px;
+}
+
+.my .user .nickname {
+    margin-right: 15px; /* circleとnicknameの間隔 */
+}
+
+.appendimg {
+    margin: 15px 0 0 15px;
+}
+
+.appendimg img {
+    object-fit: cover;
+    height: 200px;
+}
+
+/* 送信フォーム */
+.chat-form {
+    align-items: center;
+    padding: 0 10px 10px 10px;
+    margin-bottom: 5px;
+}
+
+.Cfunction {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    border: 3px solid #06c286;
+}
+
+.Cfunction .Cfunctionbtn {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.Cfunction input.text {
+    height: 50px;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+.Cfunction button.upload-icon,
+.Cfunction button.button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#file-preview-container {
+    display: none; /* 初期状態で非表示 */
+    align-items: center;
+    padding: 10px;
+    border: none;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+#file-preview-container img#delete-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
 }
 
 #file-preview {
-    width: 40px; /* プレビュー画像の幅を調整 */
-    height: 40px; /* プレビュー画像の高さを調整 */
-    object-fit: cover; /* 画像をアイコンに合わせてカバー */
-    display: none; /* 初期状態では非表示 */
+    max-width: 100px;
+    max-height: 100px;
+    margin-right: 10px;
 }
 
 #file-name {
-    color:white;
-    margin-left: 10px;
-    font-size: 12px;
+    font-size: 14px;
+    color: white;
 }
 
 #delete-button {
-    width: 20px; /* 画像の幅を20pxに設定 */
-    height: 20px; /* 画像の高さを20pxに設定 */
+    width: 30px; /* 画像の幅を20pxに設定 */
+    height: 30px; /* 画像の高さを20pxに設定 */
     cursor: pointer; /* ポインターの変更 */
     display: none; /* 初期状態では非表示 */
     margin-left: 5px;
-}
-
-body {
-    background-color: #313131;
-}
-
-h2{
-    color:white;
-    text-align: center;
-    border-bottom: solid 3px white;
-}
-
-/* 固定フッターのスタイル */
-.Cfunction {
-    position: fixed;
-    bottom: 0;
-    width: 70%;
-    padding: 10px; /* 必要に応じてパディングを設定 */
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 上部に影を追加 */
-    display: flex;
-    align-items: center;
 }
 
 .text {
     flex-grow: 1;
     margin-right: 5px; /* ボタンとの間にスペースを追加 */
     padding: 10px;
-    border-radius: 5px;
-    background-color: #808080;
-    border-color: #808080;
-    width: 400px;
-    height:20px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: white;
+    font-size: 12.5pt;
+    width: 350px;
+    height: 20px;
     resize: vertical; /* 垂直方向にのみリサイズ可能にする */
     word-wrap: break-word; /* 長い単語やURLなどで改行する */
     overflow-wrap: break-word; /* テキスト内で改行する */
@@ -66,50 +185,64 @@ h2{
 }
 
 .button img {
-    width: 20px; /* アイコンのサイズ */
-    height: 20px;
+    width: 25px; /* アイコンのサイズ */
+    height: 25px;
 }
 
-.upload-icon img{
-    width: 20px; /* アイコンのサイズ */
-    height: 20px;
+.upload-icon img {
+    width: 25px; /* アイコンのサイズ */
+    height: 25px;
+    margin-right: 10px; /* 右側に隙間を追加 */
 }
 
-.my {
-    color:white;
-    text-align: right;
-    margin: 5% 0 0 20%; /* 左側のマージンを20%に設定 */
-    padding: 10px;
-    background-color: #3B3B3B;
-    border-radius: 10px;
+/* 知り合い一覧 */
+.space {
+    width: 400px;
+    background-color: #575757;
 }
 
-.partner {
-    color:white;
-    text-align: left;
-    margin: 0 20% 0 0; 
-    padding: 10px;
-    background-color: #3B3B3B;
-    border-radius: 10px;
+@media (max-width: 1100px) {
+    .space {
+        display: none;
+    }
 }
 
-.chat-all{
+.space h2 {
+    color: white;
+    text-align: center;
+    border-bottom: solid 3px white;
+}
+
+.space-list {
+    align-items: center;
+}
+
+.profile {
     display: flex;
-    height: 100vh; /* 画面の高さ全体を使用 */
+    align-items: center; /* nicknameを水平方向に中央揃えにする */
+    margin: 15px;
 }
 
-.chat-history{
-    flex: 7; /* 全体の70%を使用 */
+.profile a {
     display: flex;
-    flex-direction: column; 
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
 }
 
-.space{
-    flex: 3; /* 全体の30%を使用 */
-    background-color: #575757; /* 背景色を設定 */
+.profile a:hover {
+    text-decoration: underline;
 }
 
-.friend{
-    color:white;
-    margin:20px;
+.profile .circle {
+    margin-right: 15px; /* circleとnicknameの間隔 */
+}
+
+.profile .nickname {
+    font-size: 17px;
+}
+
+.nofriend {
+    color: #ffffff;
+    margin: 15px;
 }
