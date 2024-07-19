@@ -32,7 +32,7 @@ $search_query = isset($_SESSION['search_query']) ? $_SESSION['search_query'] : '
     <main>
         <form action="./Search.php" method="post">
             <div class="Sfunction">
-                <input type="text" placeholder="検索" name="search" class="text">
+                <input type="text" placeholder="検索" name="search" class="text" value="<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>">
                 <button type="submit" class="button">
                     <img src="../image/SearchIcon.svg" alt="検索">
                 </button>
