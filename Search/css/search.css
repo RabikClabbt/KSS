@@ -60,7 +60,11 @@ h2{
 .user {
     display: flex;
     align-items: center;
+<<<<<<< HEAD
     margin-bottom: 15px;
+=======
+    padding-bottom: 20px;
+>>>>>>> 1f1c9b7552b0ad7983a86a7feab6eebf6eb37e83
     padding-left: 30%;
 }
 
@@ -83,11 +87,16 @@ h2{
 }
 
 .question{
+<<<<<<< HEAD
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     background-color: #444;
     padding: 10px;
+=======
+    margin-bottom:20px;
+    background-color: #3B3B3B;
+>>>>>>> 1f1c9b7552b0ad7983a86a7feab6eebf6eb37e83
     border-radius: 5px;
     margin-bottom: 10px;
 }
