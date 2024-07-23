@@ -21,30 +21,25 @@ document.addEventListener('DOMContentLoaded', function() {
             loginModal.style.display = 'none';
         }
     });
-});
 
-document.getElementById('FileUpload').addEventListener('change', function(e) {
-    var file = e.target.files[0];
-    var formData = new FormData();
+    // ファイルが選択されたときにプレビューを表示する
+    document.getElementById('FileUpload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('uploadedImage');
+        const reader = new FileReader();
 
-    console.log(file, formData);
+        reader.addEventListener('load', function() {
+            if (file.type.startsWith('image/')) {
+                preview.src = reader.result;
+                document.getElementById('imagePreview').style.display = 'block';
+            } else {
+                document.getElementById('imagePreview').style.display = 'none';
+                preview.src = '';
+            }
+        });
 
-    formData.append('FileUpload', file);
-
-    fetch('./PostForm.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            document.getElementById('imagePreview').style.display = 'block';
-            document.getElementById('uploadedImage').src = data.file;
-        } else {
-            alert(data.error);
+        if (file) {
+            reader.readAsDataURL(file);
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
     });
 });

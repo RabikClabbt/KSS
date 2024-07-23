@@ -28,7 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($chat) || (!empty($uploadedFile['name']) && $uploadedFile['error'] === UPLOAD_ERR_OK)) {
             if ($uploadedFile['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = './uploads/';
-                $uploadFilePath = $uploadDir . basename($uploadedFile['name']);
+                $fileType = strtolower(pathinfo($uploadedFile['name'], PATHINFO_EXTENSION));
+                $uploadFilePath = $uploadDir . substr(sha1(basename($uploadedFile['tmp_name']) . rand(0, 9)), 0, 15) . '.' . $fileType;
 
                 if (move_uploaded_file($uploadedFile['tmp_name'], $uploadFilePath)) {
                     // ファイルアップロード成功
@@ -94,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     fileName.textContent = file.name;
                     deleteButton.style.display = 'block';
 
-                    if (file.type.startsWith('../PersonalChat/uploads/')) {
+                    if (file.type.startsWith('image/')) {
                         const reader = new FileReader();
                         reader.onload = function(e) {
                             filePreview.src = e.target.result;
@@ -136,9 +137,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="chat-form">
                     <form action="./PersonalChat.php?partnerID=<?= $_GET['partnerID'] ?>" method="post" enctype="multipart/form-data">
                         <div id="file-preview-container">
-                            <img src="../image/Dustbin.svg" id="delete-button" onclick="removeFile()" alt="削除">
                             <img id="file-preview" style="display: none;" />
                             <span id="file-name"></span>
+                            <img src="../image/Dustbin.svg" id="delete-button" onclick="removeFile()" alt="削除">
                         </div>
                         <div class="Cfunction">
                             <input type="textarea" name="chat" value="" class="text" cols="25" rows="5" wrap="hard">

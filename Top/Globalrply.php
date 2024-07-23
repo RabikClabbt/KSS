@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 die('Failed to create directory.');
             }
         }
-        $file = './File/' . basename($_FILES['file']['name']);
+        $file = './File/' . substr(sha1(basename($_FILES['file']['tmp_name']) . rand(0, 9)), 0, 15) . '.' .strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
         if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
         }
     }else{
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql->execute([$commentID]);
     $comment = $sql->fetch(PDO::FETCH_ASSOC);
     // リプライを取得
-    $replySql = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID WHERE g.replyID = ? ORDER BY g.commentID DESC');
+    $replySql = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID WHERE g.replyID = ? ORDER BY g.commentID ASC');
     $replySql->execute([$commentID]);
     $replies = $replySql->fetchAll(PDO::FETCH_ASSOC);
 } else {
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,23 +65,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="headerr">
         <?php require '../Header/Header.php'; ?>
     </div>
-    <div class="main-content"><?php
+    <div class="main-content">
+        <?php
         if (!empty($comment)){
             $rply = $pdo->prepare('SELECT COUNT(*) as rplyCount FROM GlobalChat WHERE replyID = ?');
             $rply->execute([$commentID]);
             $rplya = $rply->fetch(PDO::FETCH_ASSOC);
-            $rplyCount = $rplya['rplyCount'];?>
+            $rplyCount = $rplya['rplyCount']; ?>
             <div class="rplychat">
                 <div class="chat-comment">
                     <div class="account">
-                        <div class="account-image"><?php
-                            if (!empty($comment['profileIcon'])){ ?>
-                                <a href="../Profile/Profile.php"><img src="<?= htmlspecialchars($comment['profileIcon']) ?>" alt="ProfileImage" class="image"></a><?php
-                            }else{ ?>
-                                <a href="../Profile/Profile.php"><img src="../image/DefaultIcon.svg" alt="ProfileImage" class="image"></a><?php
-                            } ?>
-                        </div>
-                        <a href="../Profile/Profile.php?id=<?= htmlspecialchars($comment['userID']) ?>"><p class="account-name"><?= htmlspecialchars($comment['nickname']) ?></p></a>
+                        <a href="../Profile/Profile.php?id=<?= htmlspecialchars($comment['userID']) ?>">
+                            <div class="circle"><?php
+                                if (!empty($comment['profileIcon'])){ ?>
+                                    <img src="<?= htmlspecialchars($comment['profileIcon']) ?>" alt="ProfileImage"><?php
+                                }else{ ?>
+                                    <img src="../image/DefaultIcon.svg" alt="ProfileImage"><?php
+                                } ?>
+                            </div>
+                            <div class="nickname"><?= htmlspecialchars($comment['nickname']) ?></div>
+                        </a>
                     </div>
                     <p class="comment"><?= htmlspecialchars($comment['commentText']) ?></p>
                     <div class="chat-comment-img">
@@ -100,15 +103,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="rply-comments"><?php
                     foreach ($replies as $rply){ ?>
                         <div class="rply-comment">
-                            <div class="rplyaccount">
-                                <div class="rplyaccount-image">
-                                    <?php if (!empty($rply['profileIcon'])): ?>
-                                        <a href="../Profile/Profile.php"><img src="<?= htmlspecialchars($rply['profileIcon']) ?>" alt="ProfileImage" class="image"></a>
-                                    <?php else: ?>
-                                        <img src="../image/DefaultIcon.svg" alt="ProfileImage" class="image">
-                                    <?php endif; ?>
-                                </div>
-                                <a href="../Profile/Profile.php?id=<?= htmlspecialchars($rply['userID']) ?>"><p class="account-name"><?= htmlspecialchars($rply['nickname']) ?></p></a>
+                            <div class="account">
+                                <a href="../Profile/Profile.php?id=<?= htmlspecialchars($rply['userID']) ?>">
+                                    <div class="circle"><?php
+                                        if (!empty($rply['profileIcon'])){ ?>
+                                            <img src="<?= htmlspecialchars($rply['profileIcon']) ?>" alt="ProfileImage"><?php
+                                        }else{ ?>
+                                            <img src="../image/DefaultIcon.svg" alt="ProfileImage"><?php
+                                        } ?>
+                                    </div>
+                                    <div class="nickname"><?= htmlspecialchars($comment['nickname']) ?></div>
+                                </a>
                             </div>
                             <a href="Globalrply.php?commentID=<?= $rply['commentID'] ?>" class="linkrply-atag">
                                 <p class="comment"><?= htmlspecialchars($rply['commentText']) ?></p><?php
@@ -121,23 +126,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
             <!-- 入力フォーム -->
-            <div class="send">
                 <form action="<?= $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data" class="text-box">
-                    <input type="hidden" name="userID" value="<?= $userID ?>">
-                    <input type="hidden" name="commentID" value="<?= $commentID ?>">
-                    <input type="text" class="chat-text" placeholder="テキストを入力" name="commentText" value="<?= htmlspecialchars($commentText) ?>" spellcheck="false">
-                    <label for="file-upload" class="send-file">
-                        <img src="../image/FileIcon.svg" width="20" height="20" alt="ファイル添付">
-                    </label>
-                    <input type="file" id="file-upload" name="file" style="display: none;" onchange="displayFileName(this)">
-                    <button type="submit" class="send-button">
-                        <img src="../image/SendIcon.svg" width="20" height="20" alt="送信">
-                    </button>
+                    <div id="file-preview-container">
+                        <img id="file-preview" />
+                        <span id="file-name"></span>
+                        <img src="../image/Dustbin.svg" id="delete-button" onclick="removeFile()" alt="削除">
+                    </div>
+                    <div class="send">
+                        <input type="hidden" name="userID" value="<?= $userID ?>">
+                        <input type="hidden" name="commentID" value="<?= $commentID ?>">
+                        <input type="text" class="chat-text" placeholder="テキストを入力" name="commentText" value="<?= htmlspecialchars($commentText) ?>" spellcheck="false">
+                        <label for="file-upload" class="send-file">
+                            <img src="../image/FileIcon.svg" width="20" height="20" alt="ファイル添付">
+                        </label>
+                        <input type="file" id="file-upload" name="file" style="display: none;" onchange="displayFileName(this)">
+                        <button type="submit" class="send-button">
+                            <img src="../image/SendIcon.svg" width="20" height="20" alt="送信">
+                        </button>
+                    </div>
                 </form>
-            </div><?php
-        }else{?>
-            <p>コメントが見つかりませんでした。</p><?php
-        }?>
+        <?php }else{ ?>
+            <p>コメントが見つかりませんでした。</p>
+        <?php } ?>
     </div>
+    <script src="./js/appendImage.js"></script>
 </body>
 </html>

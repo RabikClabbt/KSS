@@ -33,8 +33,6 @@ if (isset($_GET['questionID'])) {
     <link rel="icon" href="../image/SiteIcon.svg" type="image/svg">
     <title><?= htmlspecialchars($question['questionTitle']) ?> | Yadi-X</title>
     <link rel="stylesheet" type="text/css" href="./css/Detail.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="./js/Detail.js"></script>
 </head>
 <body>
     <header>
@@ -91,7 +89,7 @@ if (isset($_GET['questionID'])) {
                     <div class="questionText"><?= htmlspecialchars($question['questionText']) ?></div>
                     <?php if (!empty($question['appendFile'])) { ?>
                         <div class="appendFile">
-                            <a href="<?= $question['appendFile'] ?>" target="_blank">添付ファイルを開く</a>
+                            <img src="<?= $question['appendFile'] ?>" target="_blank">
                         </div>
                     <?php } ?>
                     <!-- 回答用のボタン -->
@@ -133,7 +131,7 @@ if (isset($_GET['questionID'])) {
                             <div class="questionText"><?= htmlspecialchars($answer['answerText']) ?></div>
                             <?php if (!empty($answer['appendFile'])) { ?>
                                 <div class="appendFile">
-                                    <a href="<?= $answer['appendFile'] ?>" target="_blank">添付ファイルを開く</a>
+                                <img src="<?= $answer['appendFile'] ?>" target="_blank">
                                 </div>
                             <?php } ?>
                             <!-- 返信用のボタン -->
@@ -178,7 +176,7 @@ if (isset($_GET['questionID'])) {
                                     <div class="questionText"><?= htmlspecialchars($reply['replyText']) ?></div>
                                     <?php if (!empty($reply['appendFile'])) { ?>
                                         <div class="appendFile">
-                                            <a href="<?= $reply['appendFile'] ?>" target="_blank">添付ファイルを開く</a>
+                                        <img src="<?= $reply['appendFile'] ?>" target="_blank">
                                         </div>
                                     <?php } ?>
                                     <!-- 返信用のボタン -->
@@ -234,14 +232,19 @@ if (isset($_GET['questionID'])) {
                 </div>
             </div>
             <div class="sendComment">
+                <div id="filePreviewContainer" class="filePreviewContainer">
+                    <img id="filePreview" class="filePreview" />
+                    <span id="fileName" class="fileName"></span>
+                    <img src="../image/Dustbin.svg" id="deleteButton" class="deleteButton" onclick="removeFile()" alt="削除">
+                </div>
                 <div class="sendCommentContent">
-                    <form action="" method="post" class="sendCommentForm">
-                        <textarea type="text" autocomplete="off" aria-autocomplete="list" aria-controls="react-autowhatever-1"　
+                    <form method="post" class="sendCommentForm">
+                        <textarea type="text" autocomplete="off" aria-autocomplete="list" aria-controls="react-autowhatever-1"
                         placeholder="<?php if(isset($_SESSION['users'])){ echo '質問へのコメントを送信する'; } else { echo 'ログインしてください'; } ?>" 
                         id="commentInput" name="comment" spellcheck="false" data-ms-editor="true"></textarea>
                         <div class="sendCommentButton">
                             <label for="appendFileButton"><img src="../image/FileIcon.svg" alt="appendFile"></label>
-                            <input type="file" id="appendFileButton" class="appendFileButton">
+                            <input type="file" id="appendFileButton" class="appendFileButton" name="appendFile" onchange="displayFileName(this)">
                             <button id="sendCommentButton" onclick="sendComment('<?php echo $questionID; ?>')">
                                 <img src="../image/SendIcon.svg" alt="send">
                             </button>
@@ -271,5 +274,10 @@ if (isset($_GET['questionID'])) {
     <footer>
         <!-- 将来的にFooter.htmlを読み込むかも -->
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./js/Detail.js"></script>
+    <script>
+        let isLoggedIn = <?php echo json_encode($isLoggedIn); ?>;
+    </script>
 </body>
 </html>

@@ -28,12 +28,24 @@ $totalCount = $conn->query("SELECT COUNT(*) FROM Question WHERE questionTitle LI
 <body>
       <header>
             <!-- Header.htmlを読み込む -->
-            <div id="external-content"></div>
-            <?php require '../Header/Header.php' ?>
-            <div class="categorylist">
-                <div class="category1">
-
-                </div>
+            <?php
+            require '../Header/Header.php';
+            $getSql = "SELECT categoryID, categoryName FROM Category";
+            $stmt = $conn->prepare($getSql);
+            $stmt->execute();
+            $getCategorys = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+            <div class="categoryList">
+                    <?php foreach ($getCategorys as $category) :?>
+                        <div class="category">
+                            <form action="<?= $_SERVER['PHP_SELF'] ?>" method="get">
+                                <input type="hidden" name="tc" value="<?= htmlspecialchars($category['categoryID'])?>" >
+                                <button type="submit" class="categoryButton">
+                                    <?= htmlspecialchars($category['categoryName'])?>
+                                </button>
+                            </form>
+                        </div>
+                    <?php endforeach;?>
             </div>
       </header>
       <main>

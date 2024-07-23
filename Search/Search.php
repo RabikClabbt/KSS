@@ -104,7 +104,7 @@ $search_query = isset($_SESSION['search_query']) ? $_SESSION['search_query'] : '
                                         <div class="nickname"><?= htmlspecialchars($row['nickname']) ?></div>
                                     </a>
                                 </div>
-                                <a href="./Detail.php?questionID=<?= $row['questionID'] ?>" class="questionLink">
+                                <a href="../Question/Detail.php?questionID=<?= $row['questionID'] ?>" class="questionLink">
                                     <div class="questionTitle"><?= htmlspecialchars($row['questionTitle']) ?></div>
                                 </a>
                             </div>

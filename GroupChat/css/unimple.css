@@ -1,0 +1,10 @@
+body{
+    background-color: #313131;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+a{
+    color: white;
+}

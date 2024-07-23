@@ -2,7 +2,7 @@ body {
     overflow: hidden;
     margin: 0;
     min-height: 100vh;
-    background-color: #313131;
+    background-color: #2c2c2c;
 }
 
 p {
@@ -24,116 +24,6 @@ a{
     display: flex;
     flex-grow: 1;
     position: relative; /* relative positioning for main content */
-}
-
-.main-content {
-    margin-left: 70px;
-    height: calc(100% - 5px);
-    flex-grow: 0;
-    position: relative; /* 相対配置 */
-    display: flex;
-    flex-direction: column; /* 縦方向の配置 */
-    align-items: center;
-    width: calc(100% - 70px); /* サイドバーの幅を差し引いた幅 */
-    padding-top: 10px;
-}
-
-.global-chat{
-    overflow: auto;
-    width: 100%;
-    height: 100%;
-    margin-bottom: 60px;
-}
-
-.global-chat::-webkit-scrollbar{
-    width: 7px;
-}
-
-.global-chat::-webkit-scrollbar-track{
-    background-color: #ccc;
-}
-
-.global-chat::-webkit-scrollbar-thumb{
-    background-color: #06c286;
-}
-
-.chat-comment{
-    width: 80%;
-    min-height: 100px;
-    margin: 0 auto;
-    background-color: #494949;
-    margin-bottom: 3px;
-}
-
-.account{
-    display: flex;
-    align-items: center;
-}
-
-.account a{
-    display: block;
-    display: flex;
-}
-
-.account-image{
-    width: 40px;
-    height: 40px;
-    border-radius: 50%; /* 円形の形状を作成 */
-    overflow: hidden; /* 画像が円内に収まるようにする */
-    border: 3px solid #06c286;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.account-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* アスペクト比を保ちつつコンテナをカバーする */
-}
-
-.account button{
-    border: none;
-    background: transparent;
-}
-
-.linkrply-atag img {
-    height: 200px;
-    object-fit: cover; /* アスペクト比を保ちつつコンテナをカバーする */
-    margin: 15px;
-}
-
-.rply{
-    display: flex;
-    justify-content: flex-end;
-}
-
-.balloon3-left {
-    position: relative;
-    display: inline-block;
-    margin: 0px 10px 1px 7px;
-    padding: 0 4px;
-    width: 30px;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
-    color: #FFF;
-    font-size: 15px;
-    font-weight: bold;
-    background: #06c286;
-    border-radius: 30%;
-    box-sizing: border-box;
-}
-
-.balloon3-left:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: -6.5px;
-    margin-top: -3px;
-    border: 3px solid transparent;
-    border-right: 5px solid #06c286;
-    z-index: 0;
 }
 
 /* --------サイドバー---------- */
@@ -251,24 +141,173 @@ a{
     background-color: #585858;
 }
 
+/* メインコンテンツ */
+.main-content {
+    margin-left: 70px;
+    height: calc(100% - 5px);
+    flex-grow: 0;
+    position: relative; /* 相対配置 */
+    display: flex;
+    flex-direction: column; /* 縦方向の配置 */
+    align-items: center;
+    width: calc(100% - 70px); /* サイドバーの幅を差し引いた幅 */
+    padding-top: 10px;
+}
+
+.global-chat {
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.global-chat::-webkit-scrollbar {
+    width: 7px;
+}
+
+.global-chat::-webkit-scrollbar-track {
+    background-color: #ccc;
+}
+
+.global-chat::-webkit-scrollbar-thumb {
+    background-color: #06c286;
+}
+
+.chat-comment {
+    width: 80%;
+    margin: 0 auto;
+    padding: 10px 10px 5px 10px;
+    background-color: #494949;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.account{
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.account a{
+    display: block;
+    display: flex;
+}
+
+.account-image{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* 円形の形状を作成 */
+    overflow: hidden; /* 画像が円内に収まるようにする */
+    border: 3px solid #06c286;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.account-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* アスペクト比を保ちつつコンテナをカバーする */
+}
+
+.account button{
+    border: none;
+    background: transparent;
+}
+
+.linkrply-atag .comment{
+    margin-left: 15px;
+}
+
+.linkrply-atag img {
+    height: 200px;
+    object-fit: cover; /* アスペクト比を保ちつつコンテナをカバーする */
+    margin: 15px;
+}
+
+.rply{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.balloon3-left {
+    position: relative;
+    display: inline-block;
+    margin: 0px 10px 1px 7px;
+    padding: 0 4px;
+    width: 30px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    color: #FFF;
+    font-size: 15px;
+    font-weight: bold;
+    background: #06c286;
+    border-radius: 30%;
+    box-sizing: border-box;
+}
+
+.balloon3-left:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -6.5px;
+    margin-top: -3px;
+    border: 3px solid transparent;
+    border-right: 5px solid #06c286;
+    z-index: 0;
+}
+
 /*-----入力フォーム------*/
+.text-box {
+    display: flex;
+    align-items: center;
+    width:100%; /* サイドバーを除いた幅 */
+}
+
+/* 添付画像プレビュー */
+#file-preview-container {
+    display: none; /* 初期状態で非表示 */
+    align-items: center;
+    border: none;
+    margin-left: 7%;
+    margin-bottom: 47px;
+    display: flex;
+}
+
+#file-preview {
+    display: none;
+    padding: 10px 0 10px 0;
+    max-width: 500px;
+    height: 25vh;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+#file-name {
+    display: none;
+}
+
+#delete-button {
+    width: 30px;
+    height: 30px;
+    cursor: pointer; /* ポインターの変更 */
+    display: none; /* 初期状態では非表示 */
+    position: absolute;
+    bottom: 56px;
+    right: 9%;
+}
+
 .send {
     display: flex;
     border: 3px solid #06c286;
     border-radius: 15px; /* 丸みを帯びた縁を設定 */
+    background-color: #2c2c2c;
     position: absolute; /* 絶対配置 */
+    left: 7%;
     bottom: 0; /* 下端に配置 */
-    width: 90%;
-    justify-content: space-between; /* 左右に均等にスペースを配置 */
+    width: 85%;
     align-items: center; /* 上下中央に配置 */
-}
-
-.text-box {
-    display: flex;
-    align-items: center;
-    width:100%; /* ボタンを除いた幅 */
-    background-color: transparent; /* 背景色を透明に */
-    padding: 5px; /* 内側に余白を追加 */
 }
 
 .chat-text {
@@ -281,7 +320,7 @@ a{
     padding-left: 10px; /* テキストのインデント */
 }
 
-.send-button, .send-file {
+.send-button, .file-icon {
     background-color: transparent;
     border: none;
     cursor: pointer;

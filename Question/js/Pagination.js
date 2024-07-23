@@ -3,21 +3,26 @@ $(document).ready(function() {
     let currentPage = 1;
     let totalPages = 0;
     let keyword = '';
+    let tc = '';
 
     function loadQuestions(page) {
         currentPage = page;
         const offset = (currentPage - 1) * itemsPerPage;
 
+        let data = { offset: offset, limit: itemsPerPage };
+        if (keyword) data.keyword = keyword;
+        if (tc) data.tc = tc;
+
         $.ajax({
             url: 'LoadQuestions.php',
             method: 'GET',
-            data: { offset: offset, limit: itemsPerPage, keyword: keyword },
+            data: data,
             success: function(data) {
                 $('#questionsContainer').html(data);
-                renderPagination();
+                updateTotalCount();
             },
-            error: function() {
-                console.log('エラーが発生しました。');
+            error: function(xhr, status, error) {
+                console.log('エラーが発生しました:', error);
             }
         });
     }
@@ -46,19 +51,25 @@ $(document).ready(function() {
     // 初期表示
     const urlParams = new URLSearchParams(window.location.search);
     keyword = urlParams.get('keyword') || '';
+    tc = urlParams.get('tc') || '';
     loadQuestions(1);
 
-    // 総件数を取得
-    $.ajax({
-        url: 'GetTotalCount.php',
-        method: 'GET',
-        data: { keyword: keyword },
-        success: function(data) {
-            totalPages = Math.ceil(data / itemsPerPage);
-            renderPagination();
-        },
-        error: function() {
-            console.log('エラーが発生しました。');
-        }
+    // カテゴリーボタンのイベントリスナー
+    $('.categoryButton').click(function(event) {
+        event.preventDefault();
+        tc = $(this).closest('form').find('input[name="tc"]').val();
+        keyword = ''; // カテゴリー変更時にキーワードをリセット
+        $('.post-search-input').val(''); // 検索フォームの入力をクリア
+        currentPage = 1;
+        loadQuestions(currentPage);
+    });
+
+    // 検索フォームのサブミットイベント
+    $('.post-search form').submit(function(event) {
+        event.preventDefault();
+        keyword = $(this).find('input[name="keyword"]').val();
+        tc = ''; // キーワード検索時にカテゴリーをリセット
+        currentPage = 1;
+        loadQuestions(currentPage);
     });
 });

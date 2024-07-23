@@ -13,13 +13,22 @@ try {
 $offset = isset($_GET['offset']) ? (int)$_GET['offset'] : 0;
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 30;
 $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+$throwCategory = isset($_GET['tc']) ? (int)$_GET['tc'] : null;
+
 
 $sql = "SELECT q.userID, u.nickname, u.profileIcon, q.questionID, q.questionTitle, q.questionText
         FROM Question q
-        JOIN Users u ON q.userID = u.userID
-        WHERE q.questionTitle LIKE '%$keyword%' OR q.questionText LIKE '%$keyword%'
-        ORDER BY q.questionID DESC
-        LIMIT $limit OFFSET $offset";
+        JOIN Users u ON q.userID = u.userID";
+
+if (!empty($keyword)) {
+    $sql .= " WHERE q.questionTitle LIKE '%$keyword%' OR q.questionText LIKE '%$keyword%'";
+}
+
+if (!is_null($throwCategory)) {
+    $sql .= " WHERE category = $throwCategory";
+}
+
+$sql .= " ORDER BY q.questionID DESC LIMIT $limit OFFSET $offset";
 
 $stmt = $conn->prepare($sql);
 $stmt->execute();

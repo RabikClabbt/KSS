@@ -23,13 +23,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
     if (isset($_FILES['FileUpload'])) {
         $targetDir = "../Question/uploads/";
         $uploadOk = 1;
-        $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+        $fileType = strtolower(pathinfo($_FILES['FileUpload']['name'], PATHINFO_EXTENSION));
+
+        error_log("FileName: ". $_FILES['FileUpload']['tmp_name'] ."Filetype". $fileType);
 
         // 許可されているファイル形式かどうかをチェック
         $allowedTypes = ["jpg", "png", "jpeg", "gif", "pdf"];
         if (!in_array($fileType, $allowedTypes)) {
             $error = "許可されていないファイル形式です。";
             $uploadOk = 0;
+        }
+
+        if (!is_dir($targetDir)) {
+            if (!mkdir($targetDir, 0777, true)) {
+                $error = "ディレクトリの作成に失敗しました。";
+                $uploadOk = 0;
+            }
         }
     
         // ファイル名に疑似乱数を使用し、0~9の値を最後尾に付与する。
@@ -122,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                     <a href="../Login/LoginIn.php" class="LoginButton">ログイン</a>
                 </div>
             </div>
-            <form id="QuestionForm" method="POST">
+            <form id="QuestionForm" method="POST" enctype="multipart/form-data">
                 <div class="QuestionContents">
                     <div class="UserInfo">
                         <?php if(isset($_SESSION['users'])) { ?>
@@ -147,9 +156,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                     <div class="QuestionForm">
                         <div class="TitleWrapper">
                             <label for="QuestionTitle">タイトル</label>
-                            <input type="text" id="QuestionTitle" name="QuestionTitle" required>
+                            <input type="text" id="QuestionTitle" name="QuestionTitle" placeholder="タイトルを記入してください" required>
                         </div>
-
                         <div class="CategoryWrapper">
                             <?php
                             try {
@@ -163,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                             }
                             ?>
                             <label for="QuestionCategory">カテゴリ</label>
-                            <select id="QuestionCategory" name="QuestionCategory">
+                            <select id="QuestionCategory" name="QuestionCategory" required>
                                 <option value="" disabled selected>カテゴリを選択</option>
                                 <?php if (!empty($categories)): ?>
                                     <?php foreach ($categories as $category): ?>
@@ -172,25 +180,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                                         </option>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
-                                <option value="">なし</option>
                             </select>
                         </div>
-
                         <div class="ContentWrapper">
                             <label for="QuestionContent">質問内容</label>
-                            <textarea id="QuestionContent" name="QuestionContent" required></textarea>
-                        </div>
-
-                        <div class="FileUploadWrapper">
-                            <label for="FileUpload">ファイル・画像のアップロード</label>
-                            <input type="file" id="FileUpload" name="FileUpload">
-                        </div>
-                        <div id="imagePreview" style="display:none;">
-                            <img id="uploadedImage" src="" alt="アップロードされた画像" style="max-width: 300px;">
+                            <textarea id="QuestionContent" name="QuestionContent" placeholder="質問内容を記入してください" required></textarea>
                         </div>
                         
-                        <div class="SubmitWrapper">
-                            <button type="submit">投稿</button>
+                        <div class="FileWrapper">
+                            <div>
+                                <div class="FileUploadWrapper">
+                                    <label for="FileUpload">ファイル・画像のアップロード</label>
+                                    <input type="file" id="FileUpload" name="FileUpload" enctype="multipart/form-data">
+                                </div>
+                                <div class="SubmitWrapper">
+                                    <button type="submit">投稿</button>
+                                </div>
+                            </div>
+                            <div id="imagePreview" class="imagePreview" style="display:none;">
+                                <img id="uploadedImage" src="" alt="アップロードされた画像">
+                            </div>
                         </div>
                     </div>
                 </div>

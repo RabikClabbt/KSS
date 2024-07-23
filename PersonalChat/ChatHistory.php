@@ -40,7 +40,6 @@ if ($history->rowCount() >= 1):
                     <div class="appendimg">
                         <img src="./<?= htmlspecialchars($row['appendFile'], ENT_QUOTES, 'UTF-8') ?>">
                     </div>
-                    <br>
                 <?php endif; ?>
             </div>
         <?php else: ?>
@@ -65,9 +64,7 @@ if ($history->rowCount() >= 1):
                     </div>
                 <?php endif; ?>
             </div>
-            <br>
         <?php endif; ?>
-        <?php $count = $row['commentID']; ?>
     <?php endforeach; ?>
 <?php else: ?>
     <p>チャット履歴がありません。</p>

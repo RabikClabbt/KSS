@@ -15,8 +15,8 @@ body {
 
 /* チャット履歴 */
 .chat-history {
-    flex: 1; /* 残りのスペースをすべて使用 */
     display: flex;
+    flex-grow: 1;
     padding: 0 10px;
     flex-direction: column; 
     overflow-y: auto; /* 垂直方向のスクロールバーを有効 */
@@ -89,7 +89,8 @@ body {
 
 .appendimg img {
     object-fit: cover;
-    height: 200px;
+    max-height: 200px;
+    max-width: 90%;
 }
 
 /* 送信フォーム */
@@ -128,30 +129,21 @@ body {
 #file-preview-container {
     display: none; /* 初期状態で非表示 */
     align-items: center;
-    padding: 10px;
     border: none;
-    margin-bottom: 10px;
     position: relative;
-}
-
-#file-preview-container img#delete-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
+    display: flex;
+    align-items: center;
 }
 
 #file-preview {
-    max-width: 100px;
-    max-height: 100px;
+    max-width: 500px;
+    height: 25vh;
+    padding: 10px 0 10px 0;
     margin-right: 10px;
 }
 
 #file-name {
-    font-size: 14px;
-    color: white;
+    display: none;
 }
 
 #delete-button {
@@ -160,6 +152,9 @@ body {
     cursor: pointer; /* ポインターの変更 */
     display: none; /* 初期状態では非表示 */
     margin-left: 5px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
 }
 
 .text {

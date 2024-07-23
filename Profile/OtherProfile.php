@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['directMessage'])) {
             if (!file_exists('File')) {
                 mkdir('File');
             }
-            $file = '../PersonalChat/File/' . basename($_FILES['file']['name']);
+            $file = '../PersonalChat/uploads/' . substr(sha1(basename($_FILES['tmp_name']) . rand(0, 9)), 0, 15) . '.' . strtolower(pathinfo($_FILES['name'], PATHINFO_EXTENSION));
             if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
                 $appendFile = $file;
             } else {
@@ -59,10 +59,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['directMessage'])) {
         try {
             $sql = $pdo->prepare('INSERT INTO DirectMessage (userID, partnerID, commentText, appendFile) VALUES (?, ?, ?, ?)');
             $sql->execute([$senderID, $partnerID, $commentText, $appendFile]);
+            
+            // INSERT成功後のリダイレクト
+            if (!headers_sent()) {
+                header("Location: ../PersonalChat/PersonalChat.php?partnerID=" . $partnerID);
+                exit;
+            } else {
+                echo "<script>window.location.href='../PersonalChat/PersonalChat.php?partnerID=" . $partnerID . "';</script>";
+                exit;
+            }
         } catch (PDOException $e) {
             if ($e->getCode() == 23000) { // 重複エラーコード
                 echo "<script>alert('ここでは一度しかこのユーザーにメッセージを送ることができません。\\nTOPページからサイドバーにある上から2番目のChatからお願いします');
-                      window.location.href='OtherProfile.php?userID=$otherUserID';
+                      window.location.href='../PersonalChat/PersonalChat.php?userID=$partnerID';
                       </script>";
                 exit();
             } else {
@@ -161,7 +170,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['directMessage'])) {
                     <button type="submit" name="directMessage" class="send-button"><img src="../image/SendIcon.svg" alt="送信"></button>
                 </div>
                 <div>
-                    <img src="../Image/DeleteIcon.svg" id="delete-button" alt="削除" onclick="removeFile()">
+                    <img src="../image/Dustbin.svg" id="delete-button" alt="削除" onclick="removeFile()">
                     <img id="file-preview" alt="File Preview">
                     <span id="file-name"></span>
                 </div>

@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 die('Failed to create directory.');
             }
         }
-        $file = './File/' . basename($_FILES['file']['name']);
+        $file = './File/' . substr(sha1(basename($_FILES['file']['tmp_name']) . rand(0, 9)), 0, 15) . '.' .strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
         if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
         }
     }else{
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -107,20 +107,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </label>
                     </li>
                     <li>
-                        <label><?php
-                            if(isset($_SESSION['users'])){?>
+                        <label>
                                 <div class="menu-icon">
-                                    <a href="../Login/LoginIn.php">
+                                    <a href="../GroupChat/Unimplemented.php">
                                         <img src="../image/GroupChat.svg" alt="Group Chat" class="icon-img">
                                     </a>
                                 </div>
-                                <a href="../Login/LoginIn.php"><span class="menu-text">Group Chat</span></a><?php
-                            }else{?>
-                                <div class="menu-icon">
-                                    <img src="../image/GroupChat.svg" alt="Group Chat" class="icon-img">
-                                </div>
-                                <span class="menu-text">Group Chat</span><?php
-                            }?>
+                                <a href="../Login/LoginIn.php"><span class="menu-text">Group Chat</span></a>
                         </label>
                     </li>
                 </ul>
@@ -138,16 +131,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $rplya = $rply->fetch(PDO::FETCH_ASSOC);
                             $rplyCount = $rplya['rplyCount'];?>
                             <div class="chat-comment">
-                                <div class="account">
+                                <a href="../Profile/OtherProfile.php?userID=<?= $row['userID'] ?>" class="account">
                                     <div class="account-image"><?php
                                         if (!empty($row['profileIcon'])) {
-                                            ?><a href="../Profile/OtherProfile.php?userID=<?= $row['userID'] ?>"><img src="<?=htmlspecialchars($row['profileIcon'])?>" alt="画像が読み込めません"></a><?php
+                                            ?><img src="<?=htmlspecialchars($row['profileIcon'])?>" alt="画像が読み込めません"><?php
                                         } else {
                                             ?><img src="../image/DefaultIcon.svg" alt="ProfileImage"><?php
                                         }?>
                                     </div>
-                                    <a href="../Profile/OtherProfile.php?userID=<?= $row['userID'] ?>"><p class="account-name"><?= htmlspecialchars($row['nickname']) ?> </p></a>
-                                </div>
+                                    <p class="account-name"><?= htmlspecialchars($row['nickname']) ?> </p>
+                                </a>
                                 <a href="Globalrply.php?commentID=<?= $row['commentID'] ?>" class="linkrply-atag">
                                     <p class="comment"><?= htmlspecialchars($row['commentText']) ?></p><?php
                                     if($row['appendFile']){?>
@@ -166,25 +159,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ?>
                 </div>
                 <!-- 入力フォーム -->
-                <div class="send">
-                    <form action="TopPage.php" method="post" enctype="multipart/form-data" class="text-box">
+                <form action="TopPage.php" method="post" enctype="multipart/form-data" class="text-box">
+                    <div id="file-preview-container">
+                        <img id="file-preview" />
+                        <span id="file-name"></span>
+                        <img src="../image/Dustbin.svg" id="delete-button" onclick="removeFile()" alt="削除">
+                    </div>
+                    <div class="send">
                         <input type="hidden" name="userID" value=<?= $userID ?>>
                         <input type="text" class="chat-text" placeholder="テキストを入力" name="commentText" spellcheck="false">
                         <div class="image-preview">
                             <img id="preview-image" src="" >
                         </div>
-                        <label for="file-upload" class="send-file">
+                        <button type="filebutton" onclick="triggerFileInput(event)" class="file-icon">
                             <img src="../image/FileIcon.svg" width="20" height="20" alt="ファイル添付">
-                        </label>
-                        <input type="file" id="file-upload" name="file" style="display: none;" onchange="displayFileName()">
+                        </button>
+                        <input type="file" id="file-upload" name="file" style="display: none;" onchange="displayFileName(this)">
                         <button type="submit" class="send-button">
                             <img src="../image/SendIcon.svg" width="20" height="20" alt="送信">
                         </button>
-                    </form>
-                </div>
-                <!-- ------------ -->
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+    <script src="./js/appendImage.js"></script>
 </body>
 </html>

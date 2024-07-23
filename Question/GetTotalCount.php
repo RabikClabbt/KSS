@@ -11,7 +11,20 @@ try {
 }
 
 $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
+$throwCategory = isset($_GET['tc']) ? (int)$_GET['tc'] : null;
 
-$totalCount = $conn->query("SELECT COUNT(*) FROM Question WHERE questionTitle LIKE '%$keyword%' OR questionText LIKE '%$keyword%'")->fetchColumn();
+$sql = "SELECT COUNT(*) FROM Question";
+
+if (!empty($keyword)) {
+    $sql .= " WHERE q.questionTitle LIKE '%$keyword%' OR q.questionText LIKE '%$keyword%'";
+}
+
+if (!is_null($throwCategory)) {
+    $sql .= " WHERE category = $throwCategory";
+}
+
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$totalCount = $stmt->fetchColumn();
+
 echo $totalCount;
-?>
