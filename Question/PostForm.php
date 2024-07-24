@@ -25,8 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
         $uploadOk = 1;
         $fileType = strtolower(pathinfo($_FILES['FileUpload']['name'], PATHINFO_EXTENSION));
 
-        error_log("FileName: ". $_FILES['FileUpload']['tmp_name'] ."Filetype". $fileType);
-
         // 許可されているファイル形式かどうかをチェック
         $allowedTypes = ["jpg", "png", "jpeg", "gif", "pdf"];
         if (!in_array($fileType, $allowedTypes)) {
@@ -52,8 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
             . '.' . $fileType
         );
 
-        error_log($targetFile);
-
         // エラーがあればアップロードを中止
         if ($uploadOk == 0) {
             $error = "ファイルはアップロードされませんでした。";
@@ -64,11 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                 $error = "ファイルのアップロードに失敗しました。";
             }
         }
-        
-        if (isset($error)) {
-            echo json_encode(['success' => false, 'error' => $error]);
-            exit;
-        }
+
     }
 
     try {

@@ -26,7 +26,11 @@ $pdo = new PDO($connect, user, pass);
 <body>
     <div class="profile-container">
         <div class="profile-header">
-            <img src="<?php echo htmlspecialchars($user['icon']); ?>" alt="Profile Icon">
+            <?php if (!empty($user['icon'])) { ?>
+                <img src="<?= $user['icon'] ?>" alt="profileIcon">
+            <?php } else { ?>
+                <img src="../image/DefaultIcon.svg" alt="profileIcon">
+            <?php } ?>
             <div class="profile-info">
                 <h1><?php echo htmlspecialchars($user['name']); ?></h1>
                 <p>#<?php echo htmlspecialchars($user['id']); ?></p>

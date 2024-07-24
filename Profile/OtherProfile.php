@@ -44,39 +44,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['directMessage'])) {
         $commentText = htmlspecialchars($_POST['commentText']);
         $appendFile = null;
 
-        if (is_uploaded_file($_FILES['file']['tmp_name'])) {
-            if (!file_exists('File')) {
-                mkdir('File');
+        if (!empty($commentText) || isset($_FILES['file'])) {
+            if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+                if (!file_exists('File')) {
+                    mkdir('File');
+                }
+                $file = '../PersonalChat/uploads/' . substr(sha1(basename($_FILES['tmp_name']) . rand(0, 9)), 0, 15) . '.' . strtolower(pathinfo($_FILES['name'], PATHINFO_EXTENSION));
+                if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
+                    $appendFile = $file;
+                } else {
+                    echo "アップロードされたファイルの移動に失敗しました。";
+                }
             }
-            $file = '../PersonalChat/uploads/' . substr(sha1(basename($_FILES['tmp_name']) . rand(0, 9)), 0, 15) . '.' . strtolower(pathinfo($_FILES['name'], PATHINFO_EXTENSION));
-            if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
-                $appendFile = $file;
-            } else {
-                echo "アップロードされたファイルの移動に失敗しました。";
-            }
-        }
 
-        try {
-            $sql = $pdo->prepare('INSERT INTO DirectMessage (userID, partnerID, commentText, appendFile) VALUES (?, ?, ?, ?)');
-            $sql->execute([$senderID, $partnerID, $commentText, $appendFile]);
-            
-            // INSERT成功後のリダイレクト
-            if (!headers_sent()) {
-                header("Location: ../PersonalChat/PersonalChat.php?partnerID=" . $partnerID);
-                exit;
-            } else {
-                echo "<script>window.location.href='../PersonalChat/PersonalChat.php?partnerID=" . $partnerID . "';</script>";
-                exit;
+            try {
+                $sql = $pdo->prepare('INSERT INTO DirectMessage (userID, partnerID, commentText, appendFile) VALUES (?, ?, ?, ?)');
+                $sql->execute([$senderID, $partnerID, $commentText, $appendFile]);
+                
+                // INSERT成功後のリダイレクト
+                if (!headers_sent()) {
+                    header("Location: ../PersonalChat/PersonalChat.php?partnerID=" . $partnerID);
+                    exit;
+                } else {
+                    echo "<script>window.location.href='../PersonalChat/PersonalChat.php?partnerID=" . $partnerID . "';</script>";
+                    exit;
+                }
+            } catch (PDOException $e) {
+                if ($e->getCode() == 23000) { // 重複エラーコード
+                    echo "<script>alert('ここでは一度しかこのユーザーにメッセージを送ることができません。\\nTOPページからサイドバーにある上から2番目のChatからお願いします');
+                        window.location.href='../PersonalChat/PersonalChat.php?userID=$partnerID';
+                        </script>";
+                    exit();
+                } else {
+                    echo 'エラーが発生しました: ' . $e->getMessage();
+                }
             }
-        } catch (PDOException $e) {
-            if ($e->getCode() == 23000) { // 重複エラーコード
-                echo "<script>alert('ここでは一度しかこのユーザーにメッセージを送ることができません。\\nTOPページからサイドバーにある上から2番目のChatからお願いします');
-                      window.location.href='../PersonalChat/PersonalChat.php?userID=$partnerID';
-                      </script>";
-                exit();
-            } else {
-                echo 'エラーが発生しました: ' . $e->getMessage();
-            }
+        } else {
+            echo "<script>alert('Message not included');</script>";
         }
     }
 }

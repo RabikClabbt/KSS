@@ -23,10 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }else{
         $file=null;
     }
-    $sql = $pdo->prepare('INSERT INTO GlobalChat (userID, commentText, appendFile) VALUES (?, ?, ?)');
-    $sql->execute([$userid,$commentText,$file]);
-    header('Location: ' . $_SERVER['PHP_SELF']);
-    exit();
+    if (!empty($commentText) || $file !== null) {
+        $sql = $pdo->prepare('INSERT INTO GlobalChat (userID, commentText, appendFile) VALUES (?, ?, ?)');
+        $sql->execute([$userid,$commentText,$file]);
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit();
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -131,7 +133,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $rplya = $rply->fetch(PDO::FETCH_ASSOC);
                             $rplyCount = $rplya['rplyCount'];?>
                             <div class="chat-comment">
+                                <?php if ($row['userID'] != "Anonymous") { ?>
                                 <a href="../Profile/OtherProfile.php?userID=<?= $row['userID'] ?>" class="account">
+                                <?php } else { ?>
+                                <a href="#" class="account">
+                                <?php } ?>
                                     <div class="account-image"><?php
                                         if (!empty($row['profileIcon'])) {
                                             ?><img src="<?=htmlspecialchars($row['profileIcon'])?>" alt="画像が読み込めません"><?php

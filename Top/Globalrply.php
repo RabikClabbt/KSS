@@ -25,18 +25,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }else{
         $file=null;
     }
-    $rp = $pdo->prepare('INSERT INTO GlobalChat (userID, replyID, commentText, appendFile) VALUES (?, ?, ?, ?)');
-    $rp->execute([$userid,$commentID,$commentText,$file]);
-    $_POST = array();
-    $sql = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID WHERE g.commentID = ?');
-    $sql->execute([$commentID]);
-    $comment = $sql->fetch(PDO::FETCH_ASSOC);
-    $replySql = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID WHERE g.replyID = ? ORDER BY g.commentID ASC');
-    $replySql->execute([$commentID]);
-    $replies = $replySql->fetchAll(PDO::FETCH_ASSOC);
-    //header('Location: ' . $_SERVER['PHP_SELF']);
-    header('Location: ' . $_SERVER['PHP_SELF'] . '?commentID=' . $commentID);
-    exit();
+    if (!empty($commentText) || $file !== null) {
+        $rp = $pdo->prepare('INSERT INTO GlobalChat (userID, replyID, commentText, appendFile) VALUES (?, ?, ?, ?)');
+        $rp->execute([$userid,$commentID,$commentText,$file]);
+        $_POST = array();
+        $sql = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID WHERE g.commentID = ?');
+        $sql->execute([$commentID]);
+        $comment = $sql->fetch(PDO::FETCH_ASSOC);
+        $replySql = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID WHERE g.replyID = ? ORDER BY g.commentID ASC');
+        $replySql->execute([$commentID]);
+        $replies = $replySql->fetchAll(PDO::FETCH_ASSOC);
+        //header('Location: ' . $_SERVER['PHP_SELF']);
+        header('Location: ' . $_SERVER['PHP_SELF'] . '?commentID=' . $commentID);
+        exit();
+    }
 }else if (isset($_GET['commentID'])) {
     $commentID = htmlspecialchars($_GET['commentID']);
     // 元のコメントを取得
@@ -75,7 +77,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="rplychat">
                 <div class="chat-comment">
                     <div class="account">
-                        <a href="../Profile/Profile.php?id=<?= htmlspecialchars($comment['userID']) ?>">
+                        <?php if ($comment['userID'] != "Anonymous") { ?>
+                        <a href="../Profile/OtherProfile.php?userID=<?= htmlspecialchars($comment['userID']) ?>">
+                        <?php } else { ?>
+                        <a href="#" class="account">
+                        <?php } ?>
                             <div class="circle"><?php
                                 if (!empty($comment['profileIcon'])){ ?>
                                     <img src="<?= htmlspecialchars($comment['profileIcon']) ?>" alt="ProfileImage"><?php
@@ -104,7 +110,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     foreach ($replies as $rply){ ?>
                         <div class="rply-comment">
                             <div class="account">
-                                <a href="../Profile/Profile.php?id=<?= htmlspecialchars($rply['userID']) ?>">
+                                <?php if ($rply['userID'] != "Anonymous") { ?>
+                                <a href="../Profile/OtherProfile.php?userID=<?= htmlspecialchars($rply['userID']) ?>">
+                                <?php } else { ?>
+                                <a href="#" class="account">
+                                <?php } ?>
                                     <div class="circle"><?php
                                         if (!empty($rply['profileIcon'])){ ?>
                                             <img src="<?= htmlspecialchars($rply['profileIcon']) ?>" alt="ProfileImage"><?php
@@ -112,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <img src="../image/DefaultIcon.svg" alt="ProfileImage"><?php
                                         } ?>
                                     </div>
-                                    <div class="nickname"><?= htmlspecialchars($comment['nickname']) ?></div>
+                                    <div class="nickname"><?= htmlspecialchars($rply['nickname']) ?></div>
                                 </a>
                             </div>
                             <a href="Globalrply.php?commentID=<?= $rply['commentID'] ?>" class="linkrply-atag">

@@ -21,7 +21,7 @@
                     <div class="circle">
                         <!-- ここの画像はデータベースから取得する-->
                         <?php
-                            if(isset($_SESSION['users'])) {
+                            if(isset($_SESSION['users']['icon'])) {
                                 echo '<img src="'. $_SESSION['users']['icon'] .'" alt="profileIcon">';
                             } else {
                                 echo '<img src="../image/DefaultIcon.svg" alt="profileIcon">';
