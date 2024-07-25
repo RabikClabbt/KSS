@@ -85,7 +85,6 @@ function sendComment(questionID) {
                 removeFile();
             } else {
                 console.error('エラー:', response.data.error);
-                alert(response.data.error);
             }
             window.location.reload();
         })
