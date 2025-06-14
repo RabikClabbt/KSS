@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="../Header/css/Header.css">
-    <div class="header">
+<link rel="stylesheet" href="../Header/css/Header.css" />
+<div class="header">
         <div class="left">
             <div class="logo">
                 <!-- トップページへの遷移 -->
@@ -44,5 +44,5 @@
                 </a>
             </div>
         </div>
-    </div>
-</link>
+</div>
+

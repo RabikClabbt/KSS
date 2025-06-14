@@ -96,8 +96,8 @@ main {
     flex-direction: column;
     flex-grow: 1;
     align-items: flex-start;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 20px;
+    border-radius: 8px;
     margin: 15px;
     color: #fff;
     position: relative;
