@@ -124,18 +124,21 @@ main {
 .questions {
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto;
     color: #fff;
+    gap: 20px;
 }
 
 .question {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    background-color: #444;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    background-color: #3a3a3a;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .question .profile {

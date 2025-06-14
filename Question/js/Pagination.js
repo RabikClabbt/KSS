@@ -27,6 +27,24 @@ $(document).ready(function() {
         });
     }
 
+    function updateTotalCount() {
+        const data = {};
+        if (keyword) data.keyword = keyword;
+        if (tc) data.tc = tc;
+        $.ajax({
+            url: 'GetTotalCount.php',
+            method: 'GET',
+            data: data,
+            success: function(count) {
+                totalPages = Math.ceil(parseInt(count, 10) / itemsPerPage);
+                renderPagination();
+            },
+            error: function(xhr, status, error) {
+                console.log('エラーが発生しました:', error);
+            }
+        });
+    }
+
     function renderPagination() {
         const paginationContainer = $('#paginationContainer');
         paginationContainer.empty();

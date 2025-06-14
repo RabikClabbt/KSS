@@ -3,7 +3,7 @@ let tableName = "Answer"; // Default to Answer
 let parentID = null;
 let commentType = "q"; // Default comment type to 'q'
 
-window.onload = function() {
+window.onload = () => {
     const bestFlgText = document.querySelector('.bestFlg p');
     commentInput = document.getElementById('commentInput');
     switch (bestFlgText.textContent) {
@@ -52,7 +52,7 @@ function sendComment(questionID) {
     const commentText = commentInput.value.trim();
     const fileInput = document.getElementById('appendFileButton');
     const file = fileInput.files[0];
-    if (commentText !== '') {
+    if (commentText !== '' || file) {
         const formData = new FormData();
         formData.append('comment', commentText);
         formData.append('questionID', questionID);
@@ -117,7 +117,7 @@ function triggerFileInput() {
     event.preventDefault();
     document.getElementById('appendFileButton').click();
 }
-function displayFileName(input) {
+const displayFileName = (input) => {
     const file = input.files[0];
     const filePreviewContainer = document.getElementById('filePreviewContainer');
     const filePreview = document.getElementById('filePreview');
