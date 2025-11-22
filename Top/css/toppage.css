@@ -3,9 +3,16 @@ body {
     margin: 0;
     min-height: 100vh;
     background-color: #2c2c2c;
+    font-family: 'Noto Sans JP', 'Segoe UI', sans-serif;
+    color: #fff;
 }
 
 p {
+    color: #fff;
+}
+
+h1 {
+    margin: 0;
     color: #fff;
 }
 
@@ -81,6 +88,8 @@ a{
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #3b3b3b;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
 }
 
 .search-buttom {
@@ -142,6 +151,7 @@ a{
 }
 
 /* メインコンテンツ */
+
 .main-content {
     margin-left: 70px;
     height: calc(100% - 5px);
@@ -151,13 +161,52 @@ a{
     flex-direction: column; /* 縦方向の配置 */
     align-items: center;
     width: calc(100% - 70px); /* サイドバーの幅を差し引いた幅 */
-    padding-top: 10px;
+    padding: 16px 20px 20px;
+    gap: 14px;
+    box-sizing: border-box;
+}
+
+.global-header {
+    width: 100%;
+    max-width: 1080px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.eyebrow {
+    text-transform: uppercase;
+    color: #9ef0c2;
+    letter-spacing: 1px;
+    font-size: 12px;
+    margin: 0 0 6px 0;
+}
+
+.lead {
+    margin: 6px 0 0 0;
+    color: #d5d5d5;
+    line-height: 1.6;
+}
+
+.action-chip {
+    border: 1px solid #06c286;
+    border-radius: 999px;
+    padding: 8px 14px;
+    color: #06c286;
+    font-weight: bold;
+    background: rgba(6, 194, 134, 0.12);
 }
 
 .global-chat {
-    overflow: auto;
+    overflow-y: auto;
     width: 100%;
-    height: 100%;
+    max-width: 1080px;
+    flex: 1;
+    background: #363636;
+    border-radius: 16px;
+    padding: 16px 14px 110px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
 }
 
 .global-chat::-webkit-scrollbar {
@@ -173,12 +222,13 @@ a{
 }
 
 .chat-comment {
-    width: 80%;
-    margin: 0 auto;
-    padding: 10px 10px 5px 10px;
+    width: 100%;
+    max-width: 1040px;
+    margin: 0 auto 10px auto;
+    padding: 12px 14px 8px 14px;
     background-color: #494949;
-    border-radius: 5px;
-    margin-bottom: 5px;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
 }
 
 .account{
@@ -220,9 +270,11 @@ a{
 }
 
 .linkrply-atag img {
-    height: 200px;
+    height: 220px;
     object-fit: cover; /* アスペクト比を保ちつつコンテナをカバーする */
     margin: 15px;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
 .rply{
@@ -259,29 +311,54 @@ a{
 }
 
 /*-----入力フォーム------*/
+
+.empty-state {
+    color: #d5d5d5;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px dashed #5f5f5f;
+    border-radius: 12px;
+    padding: 18px;
+    margin: 0 6px;
+}
+
 .text-box {
     display: flex;
+    flex-direction: column;
+    gap: 12px;
     align-items: center;
     width:100%; /* サイドバーを除いた幅 */
+    max-width: 1080px;
+    padding: 12px 10px 8px;
+    box-sizing: border-box;
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(44,44,44,0.45) 0%, rgba(44,44,44,0.9) 60%, #2c2c2c 100%);
+    backdrop-filter: blur(3px);
 }
 
 /* 添付画像プレビュー */
 #file-preview-container {
     display: none; /* 初期状態で非表示 */
     align-items: center;
-    border: none;
-    margin-left: 7%;
-    margin-bottom: 47px;
-    display: flex;
+    border: 1px dashed #06c286;
+    margin: 0;
+    padding: 10px 12px;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background: rgba(6, 194, 134, 0.06);
+    position: relative;
 }
 
 #file-preview {
     display: none;
     padding: 10px 0 10px 0;
     max-width: 500px;
-    height: 25vh;
+    height: 20vh;
     margin-right: 10px;
     object-fit: cover;
+    border-radius: 10px;
 }
 
 #file-name {
@@ -294,8 +371,8 @@ a{
     cursor: pointer; /* ポインターの変更 */
     display: none; /* 初期状態では非表示 */
     position: absolute;
-    bottom: 56px;
-    right: 9%;
+    top: 8px;
+    right: 8px;
 }
 
 .send {
@@ -303,11 +380,12 @@ a{
     border: 3px solid #06c286;
     border-radius: 15px; /* 丸みを帯びた縁を設定 */
     background-color: #2c2c2c;
-    position: absolute; /* 絶対配置 */
-    left: 7%;
-    bottom: 0; /* 下端に配置 */
-    width: 85%;
+    width: 100%;
     align-items: center; /* 上下中央に配置 */
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+    gap: 4px;
+    padding-right: 8px;
+    box-sizing: border-box;
 }
 
 .chat-text {
@@ -317,7 +395,8 @@ a{
     border: none; /* ボーダーを削除 */
     background-color: transparent; /* 背景色を透明に */
     color: #FFFFFF; /* テキストの色を白に */
-    padding-left: 10px; /* テキストのインデント */
+    padding: 0 10px; /* テキストのインデント */
+    font-size: 15px;
 }
 
 .send-button, .file-icon {

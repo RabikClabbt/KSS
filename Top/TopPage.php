@@ -17,15 +17,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 die('Failed to create directory.');
             }
         }
-        $file = './File/' . substr(sha1(basename($_FILES['file']['tmp_name']) . rand(0, 9)), 0, 15) . '.' .strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
+        $file = './File/' . substr(sha1(basename($_FILES['file']['tmp_name']) . rand(0, 9)), 0, 15) . '.' . strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION));
         if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
         }
-    }else{
-        $file=null;
+    } else {
+        $file = null;
     }
     if (!empty($commentText) || $file !== null) {
         $sql = $pdo->prepare('INSERT INTO GlobalChat (userID, commentText, appendFile) VALUES (?, ?, ?)');
-        $sql->execute([$userid,$commentText,$file]);
+        $sql->execute([$userid, $commentText, $file]);
         header('Location: ' . $_SERVER['PHP_SELF']);
         exit();
     }
@@ -48,8 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="content">
             <div class="sideber">
                 <?php
-                $chatsql=$pdo->prepare("SELECT DISTINCT CASE WHEN dm.userID = :userID THEN dm.partnerID ELSE dm.userID END AS friendID, u.nickname, u.profileIcon 
-                        FROM DirectMessage dm JOIN Users u ON (CASE WHEN dm.userID = :userID THEN dm.partnerID ELSE dm.userID END) = u.userID 
+                $chatsql = $pdo->prepare("SELECT DISTINCT CASE WHEN dm.userID = :userID THEN dm.partnerID ELSE dm.userID END AS friendID, u.nickname, u.profileIcon
+                        FROM DirectMessage dm JOIN Users u ON (CASE WHEN dm.userID = :userID THEN dm.partnerID ELSE dm.userID END) = u.userID
                         WHERE dm.userID = :userID OR dm.partnerID = :userID");
                 $chatsql->execute(['userID' => $userID]);
                 $directchat = $chatsql->fetchAll(PDO::FETCH_ASSOC);
@@ -78,14 +78,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="menu-icon">
                                 <a href="../Question/ListForum.php">
                                     <img src="../image/Q&A.svg" alt="Q&A" class="icon-img">
-                                </a href="../Question/ListForum.php">
+                                </a>
                             </div>
                             <a href="../Question/ListForum.php"><span class="menu-text">Q&A</span></a>
                         </label>
                     </li>
                     <li>
                         <label><?php
-                            if(isset($_SESSION['users'])){?>
+                            if (isset($_SESSION['users'])) { ?>
                                 <div class="menu-icon">
                                     <img src="../image/Chat.svg" alt="Chat" class="icon-img">
                                 </div>
@@ -93,45 +93,64 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <span class="menu-text">Chat</span>
                                     <div class="list">
                                         <?php
-                                        foreach($directchat as $chat){ ?>
+                                        foreach ($directchat as $chat) { ?>
                                             <p class="listname"><a href="../PersonalChat/PersonalChat.php?partnerID=<?= $chat['friendID'] ?>"> <?= $chat['nickname'] ?></a></p>
                                         <?php } ?>
                                     </div>
                                 </div><?php
-                            } else {?>
+                            } else { ?>
                                 <div class="menu-icon">
                                     <a href="../Login/LoginIn.php">
                                         <img src="../image/Chat.svg" alt="Chat" class="icon-img">
                                     </a>
                                 </div>
                                 <a href="../Login/LoginIn.php"><span class="menu-text">Chat</span></a><?php
-                            }?>
+                            } ?>
                         </label>
                     </li>
                     <li>
-                        <label>
+                        <label><?php if (isset($_SESSION['users'])) { ?>
                                 <div class="menu-icon">
-                                    <a href="../GroupChat/Unimplemented.php">
+                                    <a href="../GroupChat/GroupList.php">
+                                        <img src="../image/GroupChat.svg" alt="Group Chat" class="icon-img">
+                                    </a>
+                                </div>
+                                <a href="../GroupChat/GroupList.php"><span class="menu-text">Group Chat</span></a>
+                            <?php } else { ?>
+                                <div class="menu-icon">
+                                    <a href="../Login/LoginIn.php">
                                         <img src="../image/GroupChat.svg" alt="Group Chat" class="icon-img">
                                     </a>
                                 </div>
                                 <a href="../Login/LoginIn.php"><span class="menu-text">Group Chat</span></a>
+                            <?php } ?>
                         </label>
                     </li>
                 </ul>
             </div>
             <div class="main-content">
+                <div class="global-header">
+                    <div>
+                        <p class="eyebrow">グローバルフィード</p>
+                        <h1>全体のつぶやき</h1>
+                        <p class="lead">最新の投稿や添付画像をタイムライン形式で確認できます。</p>
+                    </div>
+                    <div class="action-chip">リアルタイムで更新</div>
+                </div>
                 <div class="global-chat">
                     <?php
                     $user = $pdo->prepare('SELECT g.*, u.* FROM GlobalChat g JOIN Users u ON g.userID = u.userID ORDER BY g.commentID DESC');
                     $user->execute();
                     $questions = $user->fetchAll(PDO::FETCH_ASSOC);
                     $rply = $pdo->prepare('SELECT COUNT(*) as rplyCount FROM GlobalChat WHERE replyID = ?');
+                    if (empty($questions)) { ?>
+                        <p class="empty-state">まだ投稿がありません。最初のメッセージを共有してみましょう。</p>
+                    <?php }
                     foreach ($questions as $row) {
                         if ($row['replyID'] == null) {
                             $rply->execute([$row['commentID']]);
                             $rplya = $rply->fetch(PDO::FETCH_ASSOC);
-                            $rplyCount = $rplya['rplyCount'];?>
+                            $rplyCount = $rplya['rplyCount']; ?>
                             <div class="chat-comment">
                                 <?php if ($row['userID'] != "Anonymous") { ?>
                                 <a href="../Profile/OtherProfile.php?userID=<?= $row['userID'] ?>" class="account">
@@ -140,18 +159,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <?php } ?>
                                     <div class="account-image"><?php
                                         if (!empty($row['profileIcon'])) {
-                                            ?><img src="<?=htmlspecialchars($row['profileIcon'])?>" alt="画像が読み込めません"><?php
+                                            ?><img src="<?= htmlspecialchars($row['profileIcon']) ?>" alt="画像が読み込めません"><?php
                                         } else {
                                             ?><img src="../image/DefaultIcon.svg" alt="ProfileImage"><?php
-                                        }?>
+                                        } ?>
                                     </div>
                                     <p class="account-name"><?= htmlspecialchars($row['nickname']) ?> </p>
                                 </a>
                                 <a href="Globalrply.php?commentID=<?= $row['commentID'] ?>" class="linkrply-atag">
                                     <p class="comment"><?= htmlspecialchars($row['commentText']) ?></p><?php
-                                    if($row['appendFile']){?>
+                                    if ($row['appendFile']) { ?>
                                         <img src="<?= $row['appendFile'] ?>" alt="画像を読み込めません"><?php
-                                    }?>
+                                    } ?>
                                 </a>
                                 <div class="rply">
                                     <img src="../image/RplyMark.svg" alt="rply" height="20" width="20">
@@ -175,9 +194,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="hidden" name="userID" value=<?= $userID ?>>
                         <input type="text" class="chat-text" placeholder="テキストを入力" name="commentText" spellcheck="false">
                         <div class="image-preview">
-                            <img id="preview-image" src="" >
+                            <img id="preview-image" src="">
                         </div>
-                        <button type="filebutton" onclick="triggerFileInput(event)" class="file-icon">
+                        <button type="button" onclick="triggerFileInput(event)" class="file-icon">
                             <img src="../image/FileIcon.svg" width="20" height="20" alt="ファイル添付">
                         </button>
                         <input type="file" id="file-upload" name="file" style="display: none;" onchange="displayFileName(this)">
