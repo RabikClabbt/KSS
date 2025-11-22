@@ -1,4 +1,4 @@
-function triggerFileInput() {
+function triggerFileInput(event) {
     event.preventDefault();
     document.getElementById('file-upload').click();
 }
